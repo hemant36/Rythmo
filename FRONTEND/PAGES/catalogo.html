@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rythmo | Catálogo</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/catalogoStyles.css">
+</head>
+<body>
+    <body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <span><i class="fa-solid fa-phone"></i> +320 9254 021</span>
+            <span><i class="fa-solid fa-envelope"></i> ejemplo.mail@info.com</span>
+        </div>
+
+        <div class="top-right">
+            <div class="header-icons">
+                <!-- WISHLIST -->
+                <a href="/PAGES/wishlist.html" class="header-icon wishlist" id="wishlist-icon" title="Lista de deseos" style="display:none">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+
+                <!-- CARRITO CON BADGE -->
+                <a href="/PAGES/cart.html" class="header-icon cart" id="cart-icon" title="Carrito de compras" style="display:none">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count" id="cart-badge" style="display: none;">0</span>
+                </a>
+                <!-- USUARIO LOGUEADO O LOGIN -->
+                <span id="user-name" class="welcome-user" style="display:none"></span>
+                <button id="logout-btn" class="login-btn" style="display:none">Cerrar sesión</button>
+                <a href="login.html" class="login-btn" id="login-btn-link">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                // Verificar token y nombre de usuario en ambos almacenamientos
+                let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+                let name = localStorage.getItem("userName") || sessionStorage.getItem("userName");
+                let currentUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+                if (token && name && currentUser) {
+                    document.getElementById("user-name").textContent = `Bienvenido@, ${name}`;
+                    document.getElementById("user-name").style.display = "inline-block";
+                    document.getElementById("logout-btn").style.display = "inline-block";
+                    document.getElementById("login-btn-link").style.display = "none";
+                    document.getElementById("wishlist-icon").style.display = "inline-block";
+                    document.getElementById("cart-icon").style.display = "inline-block";
+                } else {
+                    document.getElementById("user-name").style.display = "none";
+                    document.getElementById("logout-btn").style.display = "none";
+                    document.getElementById("login-btn-link").style.display = "inline-block";
+                    document.getElementById("wishlist-icon").style.display = "none";
+                    document.getElementById("cart-icon").style.display = "none";
+                }
+                // Logout
+                document.getElementById("logout-btn").addEventListener("click", function() {
+                    Swal.fire({
+                        title: "¿Estás seguro de que quieres cerrar sesión?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí, cerrar sesión",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token");
+                            localStorage.removeItem("userName");
+                            localStorage.removeItem("currentUser");
+                            sessionStorage.removeItem("token");
+                            sessionStorage.removeItem("userName");
+                            sessionStorage.removeItem("currentUser");
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sesión cerrada",
+                                text: "Has cerrado sesión correctamente.",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            setTimeout(function() {
+                                window.location.href = "/PAGES/index.html";
+                            }, 1500);
+                        }
+                    });
+                });
+            </script>
+            <div class="logo">
+                <img src="/IMAGES/logo.png" alt="Logo Rythmo" />
+                <div class="logo-text">
+                    <h1>Rythmo</h1>
+                    <span class="slogan">WE BELIEVE IN MUSIC.</span>
+                </div>
+            </div>
+
+            <!-- NAV BAR -->
+            <nav class="navbar">
+                <a class="nav-link" href="/PAGES/index.html">Inicio</a>
+                <a class="nav-link active" href="/PAGES/catalogo.html">Catálogo</a>
+                <a class="nav-link" href="/PAGES/nosotros.html">Nosotros</a>
+                <a class="nav-link" href="/PAGES/contact.html">Contacto</a>
+                <a class="nav-link" href="/PAGES/faq.html">FAQ</a>
+                <!-- ICONO ACCESIBILIDAD -->
+                <div id="accessibility-icon" class="nav-link search"><i class="fa-solid fa-paintbrush"></i></div>
+                <!-- PANEL ACCESIBILIDAD -->
+                <div id="accessibility-panel" class="hidden">
+                    <p><strong>Accesibilidad</strong></p>
+                
+                    <button id="increase-text">A+</button>
+                    <button id="decrease-text">A-</button>
+                    <br><br>
+                
+                    <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+
+                    <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+                    <br><br>
+                
+                    <button id="reset-accessibility">Restablecer</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL DEL CATÁLOGO -->
+    <div class="catalog-container">
+        <div class="catalog-header">
+            <h1>Nuestro Catálogo</h1>
+            <p>Descubre instrumentos, álbumes y discos de colección</p>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="filters-section">
+            <div class="filters-header">
+                <h2><i class="fa-solid fa-filter"></i> Filtrar por categoría</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="instrumentos">Instrumentos</button>
+                    <button class="filter-btn" data-filter="albumes">Álbumes</button>
+                    <button class="filter-btn" data-filter="discos">Discos</button>
+                </div>
+            </div>
+            <div class="filters-extra">
+                <div class="filter-group">
+                    <label><i class="fa-solid fa-dollar-sign"></i> Rango de precio:</label>
+                    <input type="number" id="price-min" placeholder="Mín" min="0">
+                    <span>-</span>
+                    <input type="number" id="price-max" placeholder="Máx" min="0">
+                    <button class="filter-btn-small" onclick="applyPriceFilter()">Aplicar</button>
+                </div>
+                <div class="filter-group">
+                    <label class="checkbox-filter">
+                        <input type="checkbox" id="filter-featured" onchange="applyAllFilters()">
+                        <span><i class="fa-solid fa-tag"></i> Solo en oferta</span>
+                    </label>
+                </div>
+                <button class="filter-btn-clear" onclick="clearAllFilters()"><i class="fa-solid fa-xmark"></i> Limpiar filtros</button>
+            </div>
+        </div>
+
+        <!-- PRODUCTOS -->
+        <div class="products-grid" id="products-grid">
+            <!-- Los productos se cargan aqui -->
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>Rythmo</h3>
+                        <p>Tu tienda de música de confianza desde 1975.</p>
+                    </div>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/codepath_certs?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces rápidos</h4>
+                    <ul>
+                        <li><a href="/PAGES/index.html">Inicio</a></li>
+                        <li><a href="/PAGES/catalogo.html">Catálogo</a></li>
+                        <li><a href="/PAGES/nosotros.html">Nosotros</a></li>
+                        <li><a href="/PAGES/contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="/PAGES/contact.html">Restauración</a></li>
+                        <li><a href="/PAGES/contact.html">Valuación</a></li>
+                        <li><a href="/PAGES/contact.html">Envíos</a></li>
+                        <li><a href="/PAGES/contact.html">Garantía</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Calle Vintage 123, Ciudad</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-envelope"></i> noreply.rythmo@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Rythmo. Trabajo escolar – Uso académico no comercial.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/JS/currencyUtils.js"></script>
+    <script src="/JS/cartUtils.js"></script>
+    <script src="/JS/wishlistUtils.js"></script>
+    <script src="/JS/catalogo_script.js"></script>
+    <script src="/JS/acces_script.js"></script>
+</body>
+</html>

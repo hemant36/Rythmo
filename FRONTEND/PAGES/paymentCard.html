@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rythmo | Pago</title>
+  <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+  <link rel="stylesheet" href="/CSS/paymentCard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="payment-container">  
+        <div class="payment-header">
+            <div class="logo-area">
+                <a href="index.html" class="logo-link">
+                    <img src="/IMAGES/logo.png" alt="Logo" />
+                    <span class="brand-name">Rythmo Pay</span>
+                </a>
+            </div>
+            <!-- ICONO ACCESIBILIDAD -->
+                <div id="accessibility-icon" class="nav-link search" title="Accesibilidad"><i class="fa-solid fa-paintbrush"></i></div>
+                <!-- PANEL ACCESIBILIDAD -->
+                <div id="accessibility-panel" class="hidden">
+                    <p><strong>Accesibilidad</strong></p>
+                
+                    <button id="increase-text">A+</button>
+                    <button id="decrease-text">A-</button>
+                    <br><br>
+                
+                    <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+
+                    <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+                    <br><br>
+                
+                    <button id="reset-accessibility">Restablecer</button>
+                </div>
+        </div>
+
+
+
+        <div class="payment-main">
+            <!-- FORMULARIO -->
+            <div class="payment-form">
+                <h2>Datos de la Tarjeta</h2>
+                <p>Ingresa los 16 digitos de tu tarjeta</p>
+                
+                <div class="input-group">
+                    <input type="text" id="cardNumber" maxlength="19" placeholder="2412 7512 3412 3456">
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" maxlength="4" placeholder="327">
+                    </div>
+                    <div class="input-group">
+                        <label for="expMonth">Fecha de Vencimiento</label>
+                        <div class="expiry-group">
+                            <input type="text" id="expMonth" maxlength="2" placeholder="09">
+                            <span>/</span>
+                            <input type="text" id="expYear" maxlength="2" placeholder="22">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="cardHolder">Titular de la Tarjeta</label>
+                    <input type="text" id="cardHolder" placeholder="Jonathan Michael" maxlength="25">
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" placeholder="Ingresa tu contraseña dinámica">
+                </div>
+                <div class="botones">
+                    <a href="/PAGES/generalPayment.html" class="btn-secondary ">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Cambiar método
+                </a>
+                <button class="pay-btn">Proceder al Pago</button>
+                </div>
+            </div>
+
+            <!-- TARJETA + RESUMEN -->
+            <div class="card-preview">
+                <div class="credit-card-container">
+                    <div class="credit-card-front">
+                        <div class="chip">
+                            <img class="chip-image" src="/IMAGES/chip.png" alt="Chip">
+                        </div>
+                        <div class="card-details">
+                            <div class="card-number" id="previewCardNumber">**** **** ****</div>
+                            <div class="card-info">
+                                <div>
+                                    <span class="label">Títular</span>
+                                    <span class="value" id="previewName">Jonathan Michael</span>
+                                </div>
+                                <div>
+                                    <span class="label">Expira</span>
+                                    <span class="value" id="previewExpiry">09/22</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="Mastercard logo" id="cardBrandLogo">
+                        </div>
+                    </div>
+                    <!-- TARJETA POR DETRAS -->
+                    <div class="credit-card-back">
+                        <div class="magnetic-strip"></div>
+                        <div class="cvv-section">
+                            <div class="cvv-label">CVV</div>
+                            <div class="cvv-number" id="previewCvv">***</div>
+                        </div>
+                        <div class="back-logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="Mastercard logo">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary">
+                    <p><strong>Order:</strong> <span id="orderNumber">#</span></p>
+                    <p><strong>Product:</strong> <span id="productName">#</span></p>
+                    <p><strong>Company:</strong> <span id="companyName">Rythmo</span></p>
+                    <div class="total">
+                        <strong>Total:</strong> <span id="price">$0.00</span> <span id="currencyCode"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/JS/currencyUtils.js"></script>
+    <script src="/JS/cartUtils.js"></script>
+    <script src="/JS/acces_script.js"></script>
+    <script src="/JS/pagos_script.js"></script>
+
+</body>
+</html>

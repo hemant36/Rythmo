@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transferencia Bancaria | Rythmo</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/transferStyles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+    <div class="transfer-container">
+        
+        <!-- Header con icono -->
+        <div class="transfer-header">
+            <div class="header-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <h1 class="title">Transferencia Bancaria</h1>
+            <p class="subtitle">Realiza tu pago con los siguientes datos bancarios</p>
+            <!-- ICONO ACCESIBILIDAD -->
+        <div id="accessibility-icon" class="nav-link search" title="Accesibilidad"><i class="fa-solid fa-paintbrush"></i></div>
+        <!-- PANEL ACCESIBILIDAD -->
+        <div id="accessibility-panel" class="hidden">
+            <p><strong>Accesibilidad</strong></p>
+        
+            <button id="increase-text">A+</button>
+            <button id="decrease-text">A-</button>
+            <br><br>
+        
+            <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+
+            <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+            <br><br>
+                
+            <button id="reset-accessibility">Restablecer</button>
+        </div>
+        </div>
+
+        
+
+        <!-- Caja de Advertencia -->
+        <div class="alert-box">
+            <div class="alert-icon">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <div class="alert-content">
+                <strong>IMPORTANTE:</strong> Solo se aceptarán transferencias desde una cuenta con tu propio nombre.
+            </div>
+        </div>
+
+        <!-- CONTENEDOR PRINCIPAL CON GRID -->
+        <div class="main-content-grid">
+            
+            <!-- Columna izquierda - Datos Bancarios -->
+            <div class="column-left">
+                <div class="info-card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <h3>Datos Bancarios</h3>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-solid fa-user"></i>
+                                Beneficiario
+                            </div>
+                            <div class="info-value">
+                                <span class="value-text">Rythmo Store S.A. de C.V.</span>
+                                <button onclick="copyText('Rythmo Store S.A. de C.V.')" class="copy-btn" title="Copiar beneficiario">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-solid fa-hashtag"></i>
+                                CLABE Interbancaria
+                            </div>
+                            <div class="info-value">
+                                <span class="value-text" id="clabe">6461 8019 0002 3456 78</span>
+                                <button onclick="copyText('646180190002345678')" class="copy-btn" title="Copiar CLABE">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-solid fa-building"></i>
+                                Banco
+                            </div>
+                            <div class="info-value">
+                                <span class="value-text">STP - Sistema de Transferencias y Pagos</span>
+                                <button onclick="copyText('STP')" class="copy-btn" title="Copiar banco">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fa-solid fa-tag"></i>
+                                Referencia/Número de pedido
+                            </div>
+                            <div class="info-value">
+                                <span class="value-text reference" id="reference">TR-98345-778</span>
+                                <button onclick="copyText('TR-98345-778')" class="copy-btn" title="Copiar referencia">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha - Resumen del Pago -->
+            <div class="column-right">
+                <div class="payment-summary">
+                    <h3><i class="fa-solid fa-receipt"></i> Resumen del Pago</h3>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span>Monto a transferir:</span>
+                            <strong class="amount" id="transfer-amount">$0.00 MXN</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>Monto mínimo:</span>
+                            <span id="min-amount">$100.00 MXN</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Comisión:</span>
+                            <span class="free" id="commission">$0.00 MXN</span>
+                        </div>
+                        <div class="summary-item highlight">
+                            <span>Vigencia:</span>
+                            <span class="validity">72 horas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- Fin del main-content-grid -->
+
+        <!-- Botones finales -->
+        <div class="action-buttons">
+            <a href="/PAGES/generalPayment.html" class="btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i>
+                Cambiar método
+            </a>
+            <button id="confirm-transfer-btn" class="btn-primary">
+                <span class="btn-text">Ya realicé la transferencia</span>
+                <div class="loading-spinner" style="display: none;">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                </div>
+            </button>
+        </div>
+
+        <!-- Nota de Seguridad -->
+        <div class="security-note">
+            <i class="fa-solid fa-shield-alt"></i>
+            <span>Tu transferencia está protegida</span>
+        </div>
+
+    </div>
+
+    <script src="/JS/currencyUtils.js"></script>
+    <script src="/JS/pagos_script.js"></script>
+    <script>
+    // =============================== PARA PAGO POR TRANSFERENCIA =============================== //
+    
+    let transferReference = '';
+    
+    // Función para mostrar el resumen del pedido
+    async function displayTransferSummary() {
+        // Usar la función global de pagos_script.js que ya maneja currencies
+        if (typeof displayOrderSummary === "function") {
+            await displayOrderSummary();
+        }
+        
+        // Verificar si hay datos de checkout
+        const checkoutData = JSON.parse(localStorage.getItem('checkoutData') || '{}');
+        if (!checkoutData.total) {
+            Swal.fire({
+                title: 'Error',
+                text: 'No hay información del pedido. Por favor regresa al carrito.',
+                icon: 'error',
+                confirmButtonColor: '#8B5E3C'
+            }).then(() => {
+                window.location.href = '/PAGES/cart.html';
+            });
+        }
+    }
+    
+    // Mostrar el total del pedido
+    document.addEventListener('DOMContentLoaded', function() {
+        displayTransferSummary();
+        
+        // Generar referencia única
+        const referenceElement = document.getElementById('reference');
+        if (referenceElement) {
+            transferReference = `TR-${Date.now().toString().slice(-8)}`;
+            referenceElement.textContent = transferReference;
+            
+            // Actualizar el botón de copiar referencia
+            const copyBtn = referenceElement.closest('.info-value')?.querySelector('.copy-btn');
+            if (copyBtn) {
+                copyBtn.setAttribute('onclick', `copyText('${transferReference}')`);
+            }
+        }
+    });
+    
+    // Función para copiar texto al portapapeles
+    function copyText(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            showCopyNotification('¡Copiado al portapapeles!');
+        }).catch(err => {
+            console.error('Error al copiar: ', err);
+            showCopyNotification('Error al copiar', 'error');
+        });
+    }
+
+    // Función para mostrar la notificación
+    function showCopyNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `copy-notification ${type}`;
+        notification.innerHTML = `
+            <i class="fa-solid fa-${type === 'success' ? 'check' : 'xmark'}"></i>
+            ${message}
+        `;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Función para validar el pago por transferencia
+    async function validatePayment() {
+        const confirmBtn = document.getElementById('confirm-transfer-btn');
+        const btnText = confirmBtn.querySelector('.btn-text');
+        const spinner = confirmBtn.querySelector('.loading-spinner');
+        
+        // Deshabilitar botón y mostrar spinner
+        confirmBtn.disabled = true;
+        btnText.textContent = 'Procesando...';
+        spinner.style.display = 'inline-block';
+        confirmBtn.classList.add('validating');
+        
+        try {
+            // Procesar el pedido con transferencia
+            const result = await processTransferOrder(transferReference);
+            
+            if (result.success) {
+                Swal.fire({
+                    title: '¡Pedido Registrado!',
+                    html: `
+                        <p>Tu pedido ha sido registrado exitosamente.</p>
+                        <p><strong>Número de pedido:</strong> ${result.orderNumber}</p>
+                        <p>Por favor realiza la transferencia con la referencia indicada.</p>
+                        <p>Tu pedido será procesado una vez que confirmemos el pago.</p>
+                        <p class="mt-2" style="color: #666; font-size: 0.9em;">
+                            <i class="fa-solid fa-envelope"></i> Se ha enviado un correo con los detalles.
+                        </p>
+                    `,
+                    icon: 'success',
+                    confirmButtonText: 'Continuar',
+                    confirmButtonColor: '#8B5E3C',
+                    background: '#F8F3EB',
+                    color: '#2B1E14'
+                }).then(() => {
+                    // Limpiar datos de checkout
+                    localStorage.removeItem('checkoutData');
+                    window.location.href = '/PAGES/index.html';
+                });
+            } else {
+                throw new Error(result.error || 'Error al procesar el pedido');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            
+            Swal.fire({
+                title: 'Error',
+                text: error.message || 'Hubo un problema al procesar tu pedido',
+                icon: 'error',
+                confirmButtonColor: '#8B5E3C'
+            });
+            
+            // Restaurar botón
+            confirmBtn.disabled = false;
+            btnText.textContent = 'Ya realicé la transferencia';
+            spinner.style.display = 'none';
+            confirmBtn.classList.remove('validating');
+        }
+    }
+
+    // Inicializar cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // Agregar event listener al botón de confirmación
+        const confirmBtn = document.getElementById('confirm-transfer-btn');
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', validatePayment);
+        }
+        
+        // Agregar estilos para SweetAlert 
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            .custom-swal-popup {
+                border-radius: 16px;
+                box-shadow: 0 8px 24px rgba(75, 45, 20, 0.18);
+                border: 1px solid rgba(139, 94, 60, 0.1);
+            }
+            
+            .loading-spinner {
+                margin-left: 8px;
+            }
+            
+            /* Estilos para el botón durante la validación */
+            #confirm-transfer-btn:disabled {
+                opacity: 0.8;
+                cursor: not-allowed;
+                transform: none !important;
+            }
+            
+            #confirm-transfer-btn.validating {
+                background: linear-gradient(135deg, #B08D6B, #8B5E3C);
+            }
+        `;
+        document.head.appendChild(style);
+        console.log('Estilos personalizados agregados');
+    });
+    </script>
+    <script src="/JS/acces_script.js"></script>
+</body>
+</html>

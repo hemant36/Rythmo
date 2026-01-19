@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rythmo | Métodos de Pago</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/generalPayStyles.css"/>
+</head>
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <span><i class="fa-solid fa-phone"></i> +320 9254 021</span>
+            <span><i class="fa-solid fa-envelope"></i> ejemplo.mail@info.com</span>
+        </div>
+
+        <div class="top-right">
+            <div class="header-icons">
+                <!-- WISHLIST -->
+                <a href="/PAGES/wishlist.html" class="header-icon wishlist" title="Lista de deseos">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+
+                <!-- CARRITO CON BADGE -->
+                <a href="/PAGES/cart.html" class="header-icon cart" title="Carrito de compras">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count" id="cart-badge" style="display: none;">0</span>
+                </a>
+                <!-- USUARIO LOGUEADO O LOGIN -->
+                <span id="user-name" class="welcome-user" style="display:none"></span>
+                <button id="logout-btn" class="login-btn" style="display:none">Cerrar sesión</button>
+                <a href="login.html" class="login-btn" id="login-btn-link">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                // Verificar token y nombre de usuario en ambos almacenamientos
+                let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+                let name = localStorage.getItem("userName") || sessionStorage.getItem("userName");
+                let currentUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+                if (token && name && currentUser) {
+                    document.getElementById("user-name").textContent = `Bienvenido@, ${name}`;
+                    document.getElementById("user-name").style.display = "inline-block";
+                    document.getElementById("logout-btn").style.display = "inline-block";
+                    document.getElementById("login-btn-link").style.display = "none";
+                } else {
+                    document.getElementById("user-name").style.display = "none";
+                    document.getElementById("logout-btn").style.display = "none";
+                    document.getElementById("login-btn-link").style.display = "inline-block";
+                }
+                // Logout
+                document.getElementById("logout-btn").addEventListener("click", function() {
+                    Swal.fire({
+                        title: "¿Estás seguro de que quieres cerrar sesión?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí, cerrar sesión",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token");
+                            localStorage.removeItem("userName");
+                            localStorage.removeItem("currentUser");
+                            sessionStorage.removeItem("token");
+                            sessionStorage.removeItem("userName");
+                            sessionStorage.removeItem("currentUser");
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sesión cerrada",
+                                text: "Has cerrado sesión correctamente.",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            setTimeout(function() {
+                                window.location.href = "/PAGES/index.html";
+                            }, 1500);
+                        }
+                    });
+                });
+            </script>
+            <div class="logo">
+                <img src="/IMAGES/TiredCat_No-bg.png" alt="Logo Rythmo" />
+                <div class="logo-text">
+                    <h1>Rythmo</h1>
+                    <span class="slogan">WE BELIEVE IN MUSIC.</span>
+                </div>
+            </div>
+
+            <!-- NAV BAR -->
+            <nav class="navbar">
+                <a class="nav-link" href="/PAGES/index.html">Inicio</a>
+                <a class="nav-link" href="/PAGES/catalogo.html">Catálogo</a>
+                <a class="nav-link" href="#about">Nosotros</a>
+                <a class="nav-link" href="/PAGES/contact.html">Contacto</a>
+                <a class="nav-link" href="/PAGES/faq.html">FAQ</a>
+                <!-- ICONO ACCESIBILIDAD -->
+                <div id="accessibility-icon" class="nav-link search" title="Buscar"><i class="fa-solid fa-paintbrush"></i></div>
+                <!-- PANEL ACCESIBILIDAD -->
+                <div id="accessibility-panel" class="hidden">
+                    <p><strong>Accesibilidad</strong></p>
+                    <button id="increase-text">A+</button>
+                    <button id="decrease-text">A-</button>
+                    <br><br>
+                    <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+                    <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+                    <br><br>
+                    <button id="reset-accessibility">Restablecer</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+        <!-- CONTENIDO PRINCIPAL DE DIRECCIÓN -->
+    <div class="checkout-container">
+        <div class="payment-content">
+            <!-- MIGAS DE PAN -->
+            <div class="breadcrumb">
+                <a href="/PAGES/index.html">Inicio</a>
+                <span class="separator">></span>
+                <a href="/PAGES/cart.html">Carrito</a>
+                <span class="separator">></span>
+                <span class="current">Dirección</span>
+            </div>
+
+            <!-- DIRECCIÓN DE ENVÍO -->
+            <div class="shipping-address">
+                <h2><i class="fa-solid fa-truck"></i> Dirección de Envío</h2>
+                <p class="shipping-subtitle">Ingresa los datos donde recibirás tu pedido</p>
+
+                <form id="shipping-form" class="shipping-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="recipient-name">
+                                <i class="fa-solid fa-user"></i> Nombre completo del destinatario
+                            </label>
+                            <input type="text" id="recipient-name" name="recipientName" placeholder="Ej: Juan Pérez García" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">
+                                <i class="fa-solid fa-phone"></i> Teléfono de contacto
+                            </label>
+                            <input type="tel" id="phone" name="phone" placeholder="Ej: 55 1234 5678" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="street">
+                            <i class="fa-solid fa-road"></i> Calle y número
+                        </label>
+                        <input type="text" id="street" name="street" placeholder="Ej: Av. Reforma 123, Int. 4B" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="colony">
+                                <i class="fa-solid fa-map-pin"></i> Colonia
+                            </label>
+                            <input type="text" id="colony" name="colony" placeholder="Ej: Juárez" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="zip-code">
+                                <i class="fa-solid fa-envelope"></i> Código Postal
+                            </label>
+                            <input type="text" id="zip-code" name="zipCode" placeholder="Ej: 06600" pattern="[0-9]{5}" maxlength="5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">
+                                <i class="fa-solid fa-city"></i> Ciudad
+                            </label>
+                            <input type="text" id="city" name="city" placeholder="Ej: Ciudad de México" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">
+                                <i class="fa-solid fa-map"></i> Estado / Provincia / Región
+                            </label>
+                            <input type="text" id="state" name="state" placeholder="Ej: California, Ontario, Madrid..." required>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="references">
+                            <i class="fa-solid fa-comment"></i> Referencias (opcional)
+                        </label>
+                        <textarea id="references" name="references" placeholder="Ej: Casa blanca con portón negro, entre calle 5 y 7" rows="2"></textarea>
+                    </div>
+                </form>
+
+                <button id="pay-btn" class="btn-next general-btn">Proceder al pago</button>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>Rythmo</h3>
+                        <p>Tu tienda de música de confianza desde 1975.</p>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces rápidos</h4>
+                    <ul>
+                        <li><a href="/PAGES/index.html">Inicio</a></li>
+                        <li><a href="/PAGES/catalogo.html">Catálogo</a></li>
+                        <li><a href="#about">Nosotros</a></li>
+                        <li><a href="/PAGES/contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#">Restauración</a></li>
+                        <li><a href="#">Valuación</a></li>
+                        <li><a href="#">Envíos</a></li>
+                        <li><a href="#">Garantía</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Calle Vintage 123, Ciudad</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-envelope"></i> info@rythmo.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                 <p>&copy; 2025 Rythmo. Trabajo escolar – Uso académico no comercial.</p>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        let selectedPayment = null;
+        
+        // Verificar que hay datos de checkout
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkoutData = localStorage.getItem('checkoutData');
+            
+            if (!checkoutData) {
+                Swal.fire({
+                    title: 'No hay productos',
+                    text: 'Tu carrito está vacío. Agrega productos antes de continuar.',
+                    icon: 'warning',
+                    confirmButtonColor: '#8B5E3C'
+                }).then(() => {
+                    window.location.href = '/PAGES/cart.html';
+                });
+            }
+            
+            // Limpiar dirección de sesiones anteriores
+            localStorage.removeItem('shippingAddress');
+            
+            // Inicializar validación en tiempo real
+            initShippingValidation();
+        });
+
+        // ===== VALIDACIÓN EN TIEMPO REAL DE CAMPOS DE ENVÍO =====
+        function initShippingValidation() {
+            const recipientName = document.getElementById('recipient-name');
+            const phone = document.getElementById('phone');
+            const street = document.getElementById('street');
+            const colony = document.getElementById('colony');
+            const zipCode = document.getElementById('zip-code');
+            const city = document.getElementById('city');
+            const state = document.getElementById('state');
+
+            // Validar nombre (mínimo 3 caracteres, solo letras y espacios)
+            function validateName(input) {
+                const value = input.value.trim();
+                const isValid = value.length >= 3 && /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(value);
+                updateFieldStatus(input, isValid, value.length > 0);
+                return isValid;
+            }
+
+            // Validar teléfono (mínimo 10 dígitos)
+            function validatePhone(input) {
+                const value = input.value.replace(/\D/g, '');
+                const isValid = value.length >= 10;
+                updateFieldStatus(input, isValid, input.value.length > 0);
+                return isValid;
+            }
+
+            // Validar calle (mínimo 5 caracteres)
+            function validateStreet(input) {
+                const value = input.value.trim();
+                const isValid = value.length >= 5;
+                updateFieldStatus(input, isValid, value.length > 0);
+                return isValid;
+            }
+
+            // Validar colonia (mínimo 3 caracteres)
+            function validateColony(input) {
+                const value = input.value.trim();
+                const isValid = value.length >= 3;
+                updateFieldStatus(input, isValid, value.length > 0);
+                return isValid;
+            }
+
+            // Validar código postal (exactamente 5 dígitos)
+            function validateZipCode(input) {
+                const value = input.value.replace(/\D/g, '');
+                const isValid = value.length === 5;
+                updateFieldStatus(input, isValid, input.value.length > 0);
+                return isValid;
+            }
+
+            // Validar ciudad (mínimo 2 caracteres)
+            function validateCity(input) {
+                const value = input.value.trim();
+                const isValid = value.length >= 2;
+                updateFieldStatus(input, isValid, value.length > 0);
+                return isValid;
+            }
+
+            // Validar estado (mínimo 2 caracteres)
+            function validateState(input) {
+                const value = input.value.trim();
+                const isValid = value.length >= 2;
+                updateFieldStatus(input, isValid, value.length > 0);
+                return isValid;
+            }
+
+            // Función para actualizar el estado visual del campo
+            function updateFieldStatus(input, isValid, hasValue) {
+                input.classList.remove('field-valid', 'field-invalid');
+                if (hasValue) {
+                    input.classList.add(isValid ? 'field-valid' : 'field-invalid');
+                }
+            }
+
+            // Agregar eventos de validación
+            recipientName.addEventListener('input', () => validateName(recipientName));
+            recipientName.addEventListener('blur', () => validateName(recipientName));
+
+            phone.addEventListener('input', function() {
+                // Formatear teléfono mientras escribe
+                let value = this.value.replace(/\D/g, '');
+                if (value.length > 10) value = value.substring(0, 10);
+                // Formato: XX XXXX XXXX
+                if (value.length > 6) {
+                    this.value = value.substring(0, 2) + ' ' + value.substring(2, 6) + ' ' + value.substring(6);
+                } else if (value.length > 2) {
+                    this.value = value.substring(0, 2) + ' ' + value.substring(2);
+                }
+                validatePhone(this);
+            });
+            phone.addEventListener('blur', () => validatePhone(phone));
+
+            street.addEventListener('input', () => validateStreet(street));
+            street.addEventListener('blur', () => validateStreet(street));
+
+            colony.addEventListener('input', () => validateColony(colony));
+            colony.addEventListener('blur', () => validateColony(colony));
+
+            zipCode.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').substring(0, 5);
+                validateZipCode(this);
+            });
+            zipCode.addEventListener('blur', () => validateZipCode(zipCode));
+
+            city.addEventListener('input', () => validateCity(city));
+            city.addEventListener('blur', () => validateCity(city));
+
+            state.addEventListener('input', () => validateState(state));
+            state.addEventListener('blur', () => validateState(state));
+        }
+
+            document.getElementById("pay-btn").addEventListener("click", function (e) {
+        e.preventDefault(); // evita que se navegue sin validar
+
+        // Llamamos tu propia función de validación
+            if (!validateAndSaveAddress()) {
+                Swal.fire({
+                    title: "Campos incompletos",
+                    text: "Por favor completa correctamente todos los campos obligatorios.",
+                    icon: "warning",
+                    confirmButtonText: "Entendido"
+                });
+                return;
+            }
+
+        // Si todo está bien, continuar:
+            window.location.href = "/PAGES/generalPayment.html";
+        });
+
+        // Función para validar y guardar la dirección
+        function validateAndSaveAddress() {
+            const form = document.getElementById('shipping-form');
+            
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return false;
+            }
+            
+            const shippingAddress = {
+                recipientName: document.getElementById('recipient-name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                street: document.getElementById('street').value.trim(),
+                colony: document.getElementById('colony').value.trim(),
+                zipCode: document.getElementById('zip-code').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                state: document.getElementById('state').value.trim(),
+                references: document.getElementById('references').value.trim()
+            };
+            
+            // Guardar en localStorage
+            localStorage.setItem('shippingAddress', JSON.stringify(shippingAddress));
+            
+            // También agregar al checkoutData
+            const checkoutData = JSON.parse(localStorage.getItem('checkoutData') || '{}');
+            checkoutData.shippingAddress = shippingAddress;
+            localStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+            
+            return true;
+        }
+
+        function selectPayment(method) {
+            // Primero validar la dirección
+            if (!validateAndSaveAddress()) {
+                Swal.fire({
+                    title: 'Dirección incompleta',
+                    text: 'Por favor completa todos los campos de la dirección de envío.',
+                    icon: 'warning',
+                    confirmButtonColor: '#8B5E3C'
+                });
+                return;
+            }
+            
+            // Verificar que hay checkout data
+            const checkoutData = localStorage.getItem('checkoutData');
+            if (!checkoutData) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No hay información del pedido. Por favor regresa al carrito.',
+                    icon: 'error',
+                    confirmButtonColor: '#8B5E3C'
+                }).then(() => {
+                    window.location.href = '/PAGES/cart.html';
+                });
+                return;
+            }
+            
+            // Remover selección anterior
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Agregar selección actual
+            const selectedOption = event.currentTarget;
+            selectedOption.classList.add('selected');
+            selectedPayment = method;
+
+            // Redirigir según el método seleccionado
+            setTimeout(() => {
+                switch(method) {
+                    case 'card':
+                        window.location.href = '/PAGES/paymentCard.html';
+                        break;
+                    case 'oxxo':
+                        // Confirmar antes de iniciar el timer de OXXO
+                        Swal.fire({
+                            title: '¿Confirmar pago en OXXO?',
+                            html: `<p>Se generará un código de barras válido por <strong>72 horas</strong>.</p>
+                                   <p style="font-size: 0.9rem; color: #666;">Una vez generado, deberás pagar en cualquier tienda OXXO antes de que expire.</p>`,
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí, generar código',
+                            cancelButtonText: 'Cancelar',
+                            confirmButtonColor: '#8B5E3C',
+                            cancelButtonColor: '#6c757d',
+                            background: '#F8F3EB',
+                            color: '#2B1E14'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Guardar flag para iniciar timer al llegar a la página
+                                sessionStorage.setItem('startOxxoTimer', 'true');
+                                window.location.href = '/PAGES/paymentOXXO.html';
+                            } else {
+                                // Quitar selección si cancela
+                                selectedOption.classList.remove('selected');
+                                selectedPayment = null;
+                            }
+                        });
+                        break;
+                    case 'transfer':
+                        window.location.href = '/PAGES/transfer.html';
+                        break;
+                }
+            }, 300);
+        }
+
+        // Efecto hover 
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            option.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+
+    <script src="/JS/cartUtils.js"></script>
+    <script src="/JS/acces_script.js"></script>
+</body>
+</html>

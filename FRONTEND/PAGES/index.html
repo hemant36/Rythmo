@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rythmo | Tienda de Música</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/indexStyles.css">
+</head>
+
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <span><i class="fa-solid fa-phone"></i> +320 9254 021</span>
+            <span><i class="fa-solid fa-envelope"></i> ejemplo.mail@info.com</span>
+        </div>
+
+        <div class="top-right">
+            <div class="header-icons">
+                <!-- WISHLIST -->
+                <a href="/PAGES/wishlist.html" class="header-icon wishlist" id="wishlist-icon" title="Lista de deseos" style="display:none">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+
+                <!-- CARRITO CON BADGE -->
+                <a href="/PAGES/cart.html" class="header-icon cart" id="cart-icon" title="Carrito de compras" style="display:none">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count" id="cart-badge" style="display: none;">0</span>
+                </a>
+                <!-- USUARIO LOGUEADO O LOGIN -->
+                <span id="user-name" class="welcome-user" style="display:none"></span>
+                <div class="user-menu" id="user-menu" style="display:none; position:relative;">
+                    <button id="logout-btn" class="login-btn">Cerrar sesión</button>
+                </div>
+                <a href="login.html" class="login-btn" id="login-btn-link">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                // Verificar token y nombre de usuario en ambos almacenamientos
+                let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+                let name = localStorage.getItem("userName") || sessionStorage.getItem("userName");
+                let currentUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+                if (token && name && currentUser) {
+                    document.getElementById("user-name").textContent = `Bienvenido@, ${name}`;
+                    document.getElementById("user-name").style.display = "inline-block";
+                    document.getElementById("user-menu").style.display = "inline-flex";
+                    document.getElementById("login-btn-link").style.display = "none";
+                    document.getElementById("wishlist-icon").style.display = "inline-block";
+                    document.getElementById("cart-icon").style.display = "inline-block";
+                } else {
+                    document.getElementById("user-name").style.display = "none";
+                    document.getElementById("user-menu").style.display = "none";
+                    document.getElementById("login-btn-link").style.display = "inline-block";
+                    document.getElementById("wishlist-icon").style.display = "none";
+                    document.getElementById("cart-icon").style.display = "none";
+                }
+                // Logout
+                document.getElementById("logout-btn").addEventListener("click", function() {
+                    Swal.fire({
+                        title: "¿Estás seguro de que quieres cerrar sesión?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#8B5E3C",
+                        cancelButtonColor: "#6c757d",
+                        confirmButtonText: "Sí, cerrar sesión",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token");
+                            localStorage.removeItem("userName");
+                            localStorage.removeItem("currentUser");
+                            sessionStorage.removeItem("token");
+                            sessionStorage.removeItem("userName");
+                            sessionStorage.removeItem("currentUser");
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sesión cerrada",
+                                text: "Has cerrado sesión correctamente.",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            setTimeout(function() {
+                                window.location.href = "/PAGES/index.html";
+                            }, 1500);
+                        }
+                    });
+                });
+
+                // Eliminar cuenta
+                document.getElementById("delete-account-btn").addEventListener("click", function() {
+                    Swal.fire({
+                        title: "⚠️ Eliminar cuenta",
+                        html: `
+                            <p style="color: #666; margin-bottom: 15px;">Esta acción es <strong>irreversible</strong>. Se eliminarán todos tus datos, carrito y lista de deseos.</p>
+                            <input type="password" id="confirm-password" class="swal2-input" placeholder="Confirma tu contraseña">
+                        `,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#8B5E3C",
+                        cancelButtonColor: "#6c757d",
+                        confirmButtonText: "Sí, eliminar mi cuenta",
+                        cancelButtonText: "Cancelar",
+                        preConfirm: () => {
+                            const password = document.getElementById("confirm-password").value;
+                            if (!password) {
+                                Swal.showValidationMessage("Debes ingresar tu contraseña");
+                                return false;
+                            }
+                            return password;
+                        }
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+                                const response = await fetch("http://localhost:3000/api/users/account", {
+                                    method: "DELETE",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "Authorization": `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({ password: result.value })
+                                });
+                                
+                                const data = await response.json();
+                                
+                                if (data.success) {
+                                    // Limpiar todo el almacenamiento
+                                    localStorage.clear();
+                                    sessionStorage.clear();
+                                    
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Cuenta eliminada",
+                                        text: "Tu cuenta ha sido eliminada correctamente. ¡Te extrañaremos!",
+                                        timer: 2500,
+                                        showConfirmButton: false
+                                    });
+                                    setTimeout(function() {
+                                        window.location.href = "/PAGES/index.html";
+                                    }, 2500);
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Error",
+                                        text: data.message || "No se pudo eliminar la cuenta"
+                                    });
+                                }
+                            } catch (error) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: "Error de conexión. Inténtalo de nuevo."
+                                });
+                            }
+                        }
+                    });
+                });
+            </script>
+            <div class="logo">
+                <img src="/IMAGES/logo.png" alt="Logo Rythmo" />
+                <div class="logo-text">
+                    <h1>Rythmo</h1>
+                    <span class="slogan">WE BELIEVE IN MUSIC.</span>
+                </div>
+            </div>
+
+            <!-- NAV BAR -->
+            <nav class="navbar">
+                <a class="nav-link active" href="/PAGES/index.html">Inicio</a>
+                <a class="nav-link" href="/PAGES/catalogo.html">Catálogo</a>
+                <a class="nav-link" href="/PAGES/nosotros.html">Nosotros</a>
+                <a class="nav-link" href="/PAGES/contact.html">Contacto</a>
+                <a class="nav-link" href="/PAGES/faq.html">FAQ</a>
+                <!-- ICONO ACCESIBILIDAD -->
+                <div id="accessibility-icon" class="nav-link search"><i class="fa-solid fa-paintbrush"></i></div>
+                <!-- PANEL ACCESIBILIDAD -->
+                <div id="accessibility-panel" class="hidden">
+                    <p><strong>Accesibilidad</strong></p>
+                
+                    <button id="increase-text">A+</button>
+                    <button id="decrease-text">A-</button>
+                    <br><br>
+                
+                    <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+
+                    <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+                    <br><br>
+                
+                    <button id="reset-accessibility">Restablecer</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2>Descubre el sonido</h2>
+                <p>Discos, albumes e instrumentos con alma y carácter. Revive la auténtica experiencia musical.</p>
+                <a class="btn hero-btn" href="/PAGES/catalogo.html">Explorar catálogo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS -->
+    <section class="featured-products">
+        <div class="container">
+            <h2 class="section-title">Productos en Oferta</h2>
+            <div class="products-grid" id="featured-products-grid">
+                <!-- Los productos en oferta se cargan dinámicamente -->
+                <div class="loading-featured" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                    <p style="margin-top: 10px; color: var(--text-muted);">Cargando productos en oferta...</p>
+                </div>
+            </div>
+            
+            <div class="section-cta" id="featured-cta">
+                <a href="/PAGES/catalogo.html" class="btn btn-outline">Ver todos los productos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">Nuestra Historia</h2>
+                <p>Desde 1975, Rythmo ha sido el destino para los amantes de la música auténtica. Nos especializamos en instrumentos y mercancía  original, cada uno con su propia historia que contar.</p>
+                <p>Nuestra pasión por el sonido cálido y la calidad nos impulsa a buscar las piezas más especiales para los oídos más exigentes.</p>
+                <div class="about-features">
+                    <div class="feature">
+                        <i class="fa-solid fa-medal"></i>
+                        <span>Calidad garantizada</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-tools"></i>
+                        <span>Garantía en reparación</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fa-solid fa-shipping-fast"></i>
+                        <span>Envío rápido</span>
+                    </div>
+                </div>
+                <a href="/PAGES/nosotros.html" class="btn">Conoce más</a>
+            </div>
+            <div class="about-image"></div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Únete a nuestra comunidad</h2>
+                <p>Recibe noticias sobre nuevos productos, eventos exclusivos y ofertas especiales.</p>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" id="newsletter-email" placeholder="Tu correo electrónico" required>
+                    <button type="submit">Suscribirse <i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>Rythmo</h3>
+                        <p>Tu tienda de música de confianza desde 1975.</p>
+                    </div>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/codepath_certs?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces rápidos</h4>
+                    <ul>
+                        <li><a href="/PAGES/index.html">Inicio</a></li>
+                        <li><a href="/PAGES/catalogo.html">Catálogo</a></li>
+                        <li><a href="/PAGES/nosotros.html">Nosotros</a></li>
+                        <li><a href="/PAGES/contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="/PAGES/contact.html">Restauración</a></li>
+                        <li><a href="/PAGES/contact.html">Valuación</a></li>
+                        <li><a href="/PAGES/contact.html">Envíos</a></li>
+                        <li><a href="/PAGES/contact.html">Garantía</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Calle Vintage 123, Ciudad</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-envelope"></i> noreply.rythmo@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                 <p>&copy; 2025 Rythmo. Trabajo escolar – Uso académico no comercial.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/JS/currencyUtils.js"></script>
+    <script src="/JS/cartUtils.js"></script>
+    <script src="/JS/wishlistUtils.js"></script>
+    <script src="/JS/acces_script.js"></script>
+    <script>
+        // ===== CONFIGURACIÓN DE API =====
+        const API_BASE_URL = "http://localhost:3000/api";
+        
+        // Almacenar productos destacados cargados
+        let featuredProducts = {};
+
+        // Cargar productos destacados al iniciar
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Cargar moneda del usuario primero
+                if (typeof loadUserCurrency === "function") {
+                    try {
+                        await loadUserCurrency();
+                    } catch (e) {
+                        console.warn("Error cargando moneda, usando MXN:", e);
+                    }
+                }
+                await loadFeaturedProducts();
+            } catch (error) {
+                console.error("Error en inicialización:", error);
+            }
+        });
+
+        // Función para cargar productos destacados desde la API
+        async function loadFeaturedProducts() {
+            const grid = document.getElementById('featured-products-grid');
+            
+            if (!grid) {
+                console.error("No se encontró el contenedor de productos destacados");
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/products/featured?limit=4`);
+                const data = await response.json();
+
+                if (data.success && data.products && data.products.length > 0) {
+                    // Guardar productos en memoria
+                    data.products.forEach(p => {
+                        featuredProducts[p.id] = {
+                            id: p.id,
+                            name: p.name,
+                            price: parseFloat(p.price),
+                            image: p.image || '/IMAGES/TiredCat_No-bg.png',
+                            description: p.description || '',
+                            category: p.category || 'General',
+                            stock: p.stock || 0,
+                            discount: parseInt(p.discount) || 0
+                        };
+                    });
+
+                    // Renderizar productos con precio convertido y descuento
+                    grid.innerHTML = data.products.map(product => {
+                        const discount = parseInt(product.discount) || 0;
+                        const originalPrice = parseFloat(product.price);
+                        const discountedPrice = discount > 0 ? originalPrice * (1 - discount / 100) : originalPrice;
+                        
+                        const currentPriceDisplay = typeof formatPrice === "function" 
+                            ? formatPrice(discountedPrice) 
+                            : "$" + discountedPrice.toFixed(2);
+                        const originalPriceDisplay = typeof formatPrice === "function" 
+                            ? formatPrice(originalPrice) 
+                            : "$" + originalPrice.toFixed(2);
+                        
+                        return `
+                        <div class="product-card">
+                            <div class="product-image" style="background-image: url('${product.image || '/IMAGES/TiredCat_No-bg.png'}'); background-size: cover; background-position: center;">
+                                <div class="product-badge sale-badge"><i class="fa-solid fa-tag"></i> ${discount > 0 ? `-${discount}%` : 'En Oferta'}</div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">${product.name}</h3>
+                                <p class="product-description">${product.description || product.category}</p>
+                                <div class="product-price ${discount > 0 ? 'has-discount' : ''}">
+                                    ${discount > 0 ? `<span class="original-price">${originalPriceDisplay}</span>` : ''}
+                                    <span class="current-price">${currentPriceDisplay}</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="add-to-cart" onclick="addToCartFeatured(${product.id})" ${product.stock === 0 ? 'disabled' : ''}>
+                                        <i class="fa-solid fa-cart-plus"></i> ${product.stock === 0 ? 'Agotado' : 'Añadir'}
+                                    </button>
+                                    <button class="add-to-wishlist" onclick="addToWishlistFeatured(${product.id})">
+                                        <i class="fa-regular fa-heart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `}).join('');
+                } else {
+                    // No hay productos en oferta - ocultar botón "Ver todos"
+                    document.getElementById('featured-cta').style.display = 'none';
+                    grid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                            <i class="fa-solid fa-music" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 15px;"></i>
+                            <p style="color: var(--text-muted);">No hay productos en oferta por el momento.</p>
+                            <a href="/PAGES/catalogo.html" class="btn" style="margin-top: 15px;">Ver catálogo completo</a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error al cargar productos en oferta:', error);
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                        <i class="fa-solid fa-exclamation-triangle" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
+                        <p style="color: var(--text-muted);">Error al cargar productos.</p>
+                        <button onclick="loadFeaturedProducts()" class="btn" style="margin-top: 15px;">
+                            <i class="fa-solid fa-refresh"></i> Reintentar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Función para verificar si el usuario está logueado
+        function isUserLoggedIn() {
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            return !!token;
+        }
+
+        // Función para guardar producto pendiente y redirigir al login
+        function savePendingProductAndRedirect(productId, action) {
+            const product = featuredProducts[productId];
+            if (product) {
+                const pendingProduct = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    action: action
+                };
+                localStorage.setItem('pendingProduct', JSON.stringify(pendingProduct));
+            }
+            window.location.href = '/PAGES/login.html';
+        }
+
+        // Función para mostrar alerta de login requerido
+        function showLoginRequiredAlert(action, productId) {
+            Swal.fire({
+                title: 'Inicio de sesión requerido',
+                text: `Necesitas iniciar sesión para ${action === 'cart' ? 'agregar productos al carrito' : 'agregar productos a tu lista de deseos'}`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Iniciar sesión',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#8B5E3C',
+                cancelButtonColor: '#6c757d',
+                background: '#F8F3EB',
+                color: '#2B1E14'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    savePendingProductAndRedirect(productId, action);
+                }
+            });
+        }
+
+        // Función para agregar al carrito desde productos destacados
+        function addToCartFeatured(productId) {
+            if (!isUserLoggedIn()) {
+                showLoginRequiredAlert('cart', productId);
+                return;
+            }
+            
+            // Asegurar que productId sea número
+            const id = parseInt(productId);
+            const product = featuredProducts[id];
+            if (product) {
+                // Verificar stock antes de agregar
+                const cart = getCartFromStorage();
+                const existingItem = cart.find(item => item.id === id);
+                const currentQuantity = existingItem ? existingItem.quantity : 0;
+                
+                if (currentQuantity >= product.stock) {
+                    Swal.fire({
+                        title: 'Stock limitado',
+                        text: `Solo hay ${product.stock} unidades disponibles de este producto`,
+                        icon: 'warning',
+                        confirmButtonColor: '#8B5E3C',
+                    });
+                    return;
+                }
+
+                addProductToCart({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    category: product.category,
+                    stock: product.stock
+                });
+                
+                Swal.fire({
+                    title: '¡Producto agregado!',
+                    text: `${product.name} se agregó al carrito`,
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    background: '#F8F3EB',
+                    color: '#2B1E14'
+                });
+            }
+        }
+
+        // Función para agregar a wishlist desde productos destacados
+        async function addToWishlistFeatured(productId) {
+            if (!isUserLoggedIn()) {
+                showLoginRequiredAlert('wishlist', productId);
+                return;
+            }
+            
+            // Asegurar que productId sea número
+            const id = parseInt(productId);
+            const product = featuredProducts[id];
+            if (product) {
+                const result = await addProductToWishlist({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    category: product.category,
+                    stock: product.stock
+                });
+                
+                if (result.added) {
+                    Swal.fire({
+                        title: '¡Agregado a favoritos!',
+                        text: `${product.name} se agregó a tu lista de deseos`,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        background: '#F8F3EB',
+                        color: '#2B1E14'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Ya en tu lista',
+                        text: result.message,
+                        icon: 'info',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        background: '#F8F3EB',
+                        color: '#2B1E14'
+                    });
+                }
+            }
+        }
+
+        // ===== NEWSLETTER SUBSCRIPTION =====
+        document.getElementById('newsletter-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('newsletter-email');
+            const email = emailInput.value.trim();
+            const submitBtn = this.querySelector('button[type="submit"]');
+            
+            if (!email) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor ingresa tu correo electrónico',
+                    icon: 'error',
+                    confirmButtonColor: '#8B5E3C'
+                });
+                return;
+            }
+            
+            // Deshabilitar botón mientras procesa
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/checkout/subscribe`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    Swal.fire({
+                        title: '¡Suscripción exitosa! 🎉',
+                        html: `
+                            <p>Gracias por unirte a nuestra comunidad musical.</p>
+                            <p style="margin-top: 15px; font-weight: 600; color: #8B5E3C;">
+                                Tu cupón de bienvenida: <br>
+                                <span style="font-size: 1.5rem; background: #8B5E3C; color: white; padding: 8px 16px; border-radius: 8px; display: inline-block; margin-top: 10px;">
+                                    ${data.couponCode}
+                                </span>
+                            </p>
+                            <p style="font-size: 0.9rem; color: #666; margin-top: 15px;">
+                                También te lo enviamos a tu correo 📧
+                            </p>
+                        `,
+                        icon: 'success',
+                        confirmButtonColor: '#8B5E3C',
+                        confirmButtonText: '¡Genial!'
+                    });
+                    emailInput.value = '';
+                } else {
+                    Swal.fire({
+                        title: 'Aviso',
+                        text: data.message || 'No se pudo completar la suscripción',
+                        icon: 'info',
+                        confirmButtonColor: '#8B5E3C'
+                    });
+                    emailInput.value = '';
+                }
+            } catch (error) {
+                console.error('Error al suscribirse:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema al procesar tu suscripción. Intenta de nuevo.',
+                    icon: 'error',
+                    confirmButtonColor: '#8B5E3C'
+                });
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Suscribirse <i class="fa-solid fa-paper-plane"></i>';
+            }
+        });
+
+        // Exportar funciones al scope global para que funcionen con onclick
+        window.addToCartFeatured = addToCartFeatured;
+        window.addToWishlistFeatured = addToWishlistFeatured;
+        window.loadFeaturedProducts = loadFeaturedProducts;
+    </script>
+</body>
+</html>

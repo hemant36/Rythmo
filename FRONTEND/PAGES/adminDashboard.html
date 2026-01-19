@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rythmo | Panel de Administración</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png">
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/CSS/adminStyles.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- ========== SIDEBAR IZQUIERDA ========== -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="/IMAGES/logo_darkmode.png" alt="Logo Rythmo" class="logo-icon">
+            <span class="logo-text">Rythmo Admin</span>
+        </div>
+
+        <!-- Secciones -->
+        <div class="menu-section">
+            <h3 class="menu-title">Principal</h3>
+            <div class="menu-item active" data-page="dashboard">
+                <i class="fa-solid fa-chart-line menu-icon"></i>
+                <span class="menu-text">Dashboard</span>
+            </div>
+            <div class="menu-item" data-page="clientes">
+                <i class="fa-solid fa-users menu-icon"></i>
+                <span class="menu-text">Clientes</span>
+            </div>
+            <div class="menu-item" data-page="pedidos">
+                <i class="fa-solid fa-box menu-icon"></i>
+                <span class="menu-text">Pedidos</span>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h3 class="menu-title">Productos</h3>
+            <div class="menu-item" data-page="agregar">
+                <i class="fa-solid fa-plus menu-icon"></i>
+                <span class="menu-text">Agregar Producto</span>
+            </div>
+            <div class="menu-item" data-page="actualizar">
+                <i class="fa-solid fa-pen-to-square menu-icon"></i>
+                <span class="menu-text">Actualizar Producto</span>
+            </div>
+            <div class="menu-item" data-page="eliminar">
+                <i class="fa-solid fa-trash menu-icon"></i>
+                <span class="menu-text">Eliminar Producto</span>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+             <!-- ICONO ACCESIBILIDAD -->
+                <div id="accessibility-icon" class="menu-item" title="Buscar">
+                    <i class="fa-solid fa-paintbrush"></i>
+                    <span class="menu-text">Cambiar Tema</span>
+                </div>
+                <!-- PANEL ACCESIBILIDAD -->
+                <div id="accessibility-panel" class="hidden">
+                    <p><strong>Accesibilidad</strong></p>
+                
+                    <button id="increase-text">A+</button>
+                    <button id="decrease-text">A-</button>
+                    <br><br>
+                
+                    <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+
+                    <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+                    <br><br>
+                
+                    <button id="reset-accessibility">Restablecer</button>
+                </div>
+
+            <div class="menu-item" data-page="logout">
+                <i class="fa-solid fa-door-open menu-icon"></i>
+                <span class="menu-text">Cerrar Sesión</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <main class="main-content">
+        <!-- HEADER -->
+        <header class="content-header">
+            <div class="header-title">
+                <h1 id="page-title">Dashboard</h1>
+                <p id="page-desc">Bienvenido al panel de administración</p>
+            </div>
+
+            <div class="user-info">
+                <div class="user-avatar"><i class="fa-solid fa-crown"></i></div>
+                <div class="user-details">
+                    <span class="user-name">Nombre completo del Administrador</span>
+                    <span class="user-status"><span class="status-dot"></span> En línea</span>
+                    <span class="user-role">Administrador</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENIDO DINÁMICO DE CADA PÁGINA -->
+        <div id="page-content">
+            <!-- DASHBOARD -->
+            <section id="dashboard-section" class="page-section active">
+                <!-- Tarjetas estadísticas -->
+                <section class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-icon sales"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <div class="stat-info">
+                            <h3 class="stat-value" id="total-sales">$0</h3>
+                            <p class="stat-label">Ventas Totales</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon products"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <div class="stat-info">
+                            <h3 class="stat-value" id="total-products">0</h3>
+                            <p class="stat-label">Productos</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon customers"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-info">
+                            <h3 class="stat-value" id="total-customers">0</h3>
+                            <p class="stat-label">Clientes</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orders"><i class="fa-solid fa-clipboard-list"></i></div>
+                        <div class="stat-info">
+                            <h3 class="stat-value" id="total-orders">0</h3>
+                            <p class="stat-label">Pedidos</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Gráficas -->
+                <section class="dashboard-section">
+                    <h2>Análisis de Ventas</h2>
+                    <div class="charts-container">
+                        <div class="chart-box">
+                            <h3>Ventas por Categoría</h3>
+                            <div class="chart-placeholder" id="sales-chart"></div>
+                        </div>
+                        <div class="chart-box">
+                            <h3>Productos Más Vendidos</h3>
+                            <div class="chart-placeholder" id="products-chart"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reporte de Inventario -->
+                <section class="dashboard-section">
+                    <h2>Reporte de Existencias por Categoría</h2>
+                    <div id="inventory-report" class="inventory-container">
+                        <div class="loading">Cargando inventario...</div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECCIONES PARA EL BACK -->
+            <section id="agregar-section" class="page-section">
+                <div class="crud-container">
+                    <h2>Agregar Producto</h2>
+                    <form id="add-product-form" class="crud-form">
+                        <div class="form-row">
+                            <label for="product-name">Nombre</label>
+                            <input type="text" id="product-name" name="nombre" placeholder="Nombre del producto" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="product-price">Precio</label>
+                            <input type="number" id="product-price" name="precio" step="0.01" placeholder="0.00" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="product-description">Descripción</label>
+                            <textarea id="product-description" name="descripcion" placeholder="Descripción del producto"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="product-category">Categoría</label>
+                            <select id="product-category" name="categoria" required>
+                                <option value="">Selecciona una categoría</option>
+                                <option value="Discos">Discos</option>
+                                <option value="Albumes">Álbumes</option>
+                                <option value="Instrumentos">Instrumentos</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="product-stock">Stock</label>
+                            <input type="number" id="product-stock" name="stock" placeholder="0" value="0" required>
+                        </div>
+
+                        <div class="form-row checkbox-row">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="product-featured" name="isFeatured">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-text"><i class="fa-solid fa-tag"></i> Producto en Oferta</span>
+                            </label>
+                            <p class="form-hint">Los productos en oferta aparecerán en la página principal</p>
+                        </div>
+
+                        <div class="form-row discount-row" id="discount-row" style="display: none;">
+                            <label for="product-discount">Porcentaje de descuento (%)</label>
+                            <input type="number" id="product-discount" name="discount" min="0" max="99" placeholder="Ej: 15" value="0">
+                            <p class="form-hint">Ingresa el % de descuento (0-99). El precio original se mostrará tachado.</p>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="product-image">Imagen del Producto</label>
+                            
+                            <!-- Input real (oculto) - SIN atributo name -->
+                            <input type="file" id="product-image" accept="image/*" class="hidden-input">
+                            
+                            <div class="image-upload-box" id="image-upload-box">
+                                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                                <p>Haz clic para subir una imagen</p>
+                                <img id="image-preview" class="image-preview hidden" alt="Vista previa">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-save"></i> Guardar Producto
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fa-solid fa-eraser"></i> Limpiar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="actualizar-section" class="page-section">
+                <div class="crud-container">
+                    <h2>Actualizar Producto</h2>
+                    <div class="search-section">
+                        <input type="text" id="search-product" placeholder="Buscar producto por nombre..." class="search-input">
+                        <button class="btn btn-primary" id="search-btn">Buscar</button>
+                    </div>
+                    <div id="update-product-form" class="hidden">
+                        <!-- Formulario para cargar dinámicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="eliminar-section" class="page-section">
+                <div class="crud-container">
+                    <h2>Eliminar Producto</h2>
+                    <div class="delete-warning">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        Esta acción eliminará productos permanentemente y no se puede deshacer.
+                    </div>
+                    <div class="delete-search-section">
+                        <div class="search-input-wrapper">
+                            <i class="fa-solid fa-search"></i>
+                            <input type="text" id="delete-search-input" class="search-input" placeholder="Buscar producto por nombre...">
+                        </div>
+                        <button class="btn" id="clear-delete-search" title="Limpiar búsqueda">
+                            <i class="fa-solid fa-xmark"></i> Limpiar
+                        </button>
+                    </div>
+                    <div class="products-list" id="delete-products-list">
+                        <!-- Lista de productos para eliminar -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="clientes-section" class="page-section">
+                <div class="crud-container">
+                    <h2>Gestión de Clientes</h2>
+                    <div id="clients-list" class="clients-table-container">
+                        <div class="loading">Cargando clientes...</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pedidos-section" class="page-section">
+                <div class="crud-container">
+                    <h2><i class="fa-solid fa-box"></i> Gestión de Pedidos</h2>
+                    
+                    <!-- Filtros de pedidos -->
+                    <div class="orders-filters">
+                        <div class="filter-group">
+                            <label for="filter-status">Filtrar por estado:</label>
+                            <select id="filter-status" onchange="filterOrders()">
+                                <option value="">Todos</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="procesando">Procesando</option>
+                                <option value="enviado">Enviado</option>
+                                <option value="entregado">Entregado</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="search-order">Buscar:</label>
+                            <input type="text" id="search-order" placeholder="ID o cliente..." onkeyup="filterOrders()">
+                        </div>
+                        <div class="filter-group filter-actions">
+                            <button class="btn btn-clear-filters" onclick="clearOrderFilters()">
+                                <i class="fa-solid fa-xmark"></i> Limpiar filtros
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="orders-list" class="orders-container">
+                        <div class="loading">Cargando pedidos...</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="/JS/acces_script.js"></script>
+    <script src="/JS/admin_script.js"></script>
+</body>
+</html>

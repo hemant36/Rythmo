@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rythmo | Tienda de Música</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/aboutUsStyles.css">
+</head>
+
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <span><i class="fa-solid fa-phone"></i> +320 9254 021</span>
+            <span><i class="fa-solid fa-envelope"></i> ejemplo.mail@info.com</span>
+        </div>
+
+        <div class="top-right">
+            <div class="header-icons">
+                <!-- WISHLIST -->
+                <a href="/PAGES/wishlist.html" class="header-icon wishlist" id="wishlist-icon" title="Lista de deseos" style="display:none">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+
+                <!-- CARRITO CON BADGE -->
+                <a href="/PAGES/cart.html" class="header-icon cart" id="cart-icon" title="Carrito de compras" style="display:none">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count" id="cart-badge" style="display: none;">0</span>
+                </a>
+                <!-- USUARIO LOGUEADO O LOGIN -->
+                <span id="user-name" class="welcome-user" style="display:none"></span>
+                <button id="logout-btn" class="login-btn" style="display:none">Cerrar sesión</button>
+                <a href="login.html" class="login-btn" id="login-btn-link">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                // Verificar token y nombre de usuario en ambos almacenamientos
+                let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+                let name = localStorage.getItem("userName") || sessionStorage.getItem("userName");
+                let currentUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+                if (token && name && currentUser) {
+                    document.getElementById("user-name").textContent = `Bienvenido@, ${name}`;
+                    document.getElementById("user-name").style.display = "inline-block";
+                    document.getElementById("logout-btn").style.display = "inline-block";
+                    document.getElementById("login-btn-link").style.display = "none";
+                    document.getElementById("wishlist-icon").style.display = "inline-block";
+                    document.getElementById("cart-icon").style.display = "inline-block";
+                } else {
+                    document.getElementById("user-name").style.display = "none";
+                    document.getElementById("logout-btn").style.display = "none";
+                    document.getElementById("login-btn-link").style.display = "inline-block";
+                    document.getElementById("wishlist-icon").style.display = "none";
+                    document.getElementById("cart-icon").style.display = "none";
+                }
+                // Logout
+                document.getElementById("logout-btn").addEventListener("click", function() {
+                    Swal.fire({
+                        title: "¿Estás seguro de que quieres cerrar sesión?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí, cerrar sesión",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token");
+                            localStorage.removeItem("userName");
+                            localStorage.removeItem("currentUser");
+                            sessionStorage.removeItem("token");
+                            sessionStorage.removeItem("userName");
+                            sessionStorage.removeItem("currentUser");
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sesión cerrada",
+                                text: "Has cerrado sesión correctamente.",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            setTimeout(function() {
+                                window.location.href = "/PAGES/index.html";
+                            }, 1500);
+                        }
+                    });
+                });
+            </script>
+            <div class="logo">
+                <img src="/IMAGES/logo.png" alt="Logo Rythmo" />
+                <div class="logo-text">
+                    <h1>Rythmo</h1>
+                    <span class="slogan">WE BELIEVE IN MUSIC.</span>
+                </div>
+            </div>
+
+            <!-- NAV BAR -->
+            <nav class="navbar">
+                <a class="nav-link" href="/PAGES/index.html">Inicio</a>
+                <a class="nav-link" href="/PAGES/catalogo.html">Catálogo</a>
+                <a class="nav-link active" href="/PAGES/nosotros.html">Nosotros</a>
+                <a class="nav-link" href="/PAGES/contact.html">Contacto</a>
+                <a class="nav-link" href="/PAGES/faq.html">FAQ</a>
+                <!-- ICONO ACCESIBILIDAD -->
+                <div id="accessibility-icon" class="nav-link search"><i class="fa-solid fa-paintbrush"></i></div>
+                <!-- PANEL ACCESIBILIDAD -->
+                <div id="accessibility-panel" class="hidden">
+                    <p><strong>Accesibilidad</strong></p>
+                
+                    <button id="increase-text">A+</button>
+                    <button id="decrease-text">A-</button>
+                    <br><br>
+                
+                    <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+
+                    <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+                    <br><br>
+                
+                    <button id="reset-accessibility">Restablecer</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="music-team-section">
+        <div class="team-header">
+            <div class="section-badge">
+                <i class="fa-solid fa-users"></i>
+                EQUIPO RYTHMO
+            </div>
+            <h1 class="retro-title">El <span class="highlight">Equipo</span> detrás de la magia musical</h1>
+            <p class="retro-description">Somos un equipo apasionado de creadores, desarrolladores y amantes de la música que creemos que cada nota cuenta una historia. Con décadas de experiencia combinada, hemos dado vida a Rythmo para que disfrutes de la mejor experiencia musical.</p>
+            
+            <div class="team-stats">
+                <div class="stat">
+                    <div class="stat-content">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Desarrolladores</span>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="stat-content">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">Arquitectos de sistema</span>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="stat-content">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">Diseñadores</span>
+                    </div>
+                </div>
+            </div>
+            
+            <a class="cta-btn retro-btn" href="/PAGES/index.html">
+                Ver nuestro trabajo
+                <span class="btn-wave"></span>
+            </a>
+        </div>
+
+        <!-- Elementos flotantes musicales -->
+        <div class="floating-elements-container">
+            <div class="floating-element floating-element-1">
+                <i class="fa-solid fa-music"></i>
+            </div>
+            <div class="floating-element floating-element-2">
+                <i class="fa-solid fa-headphones"></i>
+            </div>
+            <div class="floating-element floating-element-3">
+                <i class="fa-solid fa-record-vinyl"></i>
+            </div>
+            <div class="floating-element floating-element-4">
+                <i class="fa-solid fa-volume-high"></i>
+            </div>
+            <div class="floating-element floating-element-5">
+                <i class="fa-solid fa-guitar"></i>
+            </div>
+            <div class="floating-element floating-element-6">
+                <i class="fa-solid fa-drum"></i>
+            </div>
+            <div class="floating-element floating-element-7">
+                <i class="fa-solid fa-microphone"></i>
+            </div>
+            <div class="floating-element floating-element-8">
+                <i class="fa-solid fa-radio"></i>
+            </div>
+            <div class="floating-element floating-element-9">
+                <i class="fa-solid fa-compact-disc"></i>
+            </div>
+            <div class="floating-element floating-element-10">
+                <i class="fa-solid fa-sliders"></i>
+            </div>
+            <div class="floating-element floating-element-11">
+                <div class="music-note">♪</div>
+            </div>
+            <div class="floating-element floating-element-12">
+                <div class="music-note">♫</div>
+            </div>
+            <div class="floating-element floating-element-13">
+                <div class="music-note">♬</div>
+            </div>
+        </div>
+
+        <div class="team-cards-container">
+            <div class="section-header">
+                <h2 class="team-subtitle">Nuestro equipo creativo</h2>
+                <p class="team-subdescription">Conoce a las mentes brillantes que hicieron posible Rythmo</p>
+            </div>
+            
+            <!-- CONTENEDOR ESPECÍFICO PARA 4 TARJETAS -->
+            <div class="team-four-cards">
+                <!-- TARJETA 1 -->
+                <div class="team-member-card">
+                    <div class="card-inner">
+                        <div class="member-photo">
+                            <div class="photo-container">
+                                <img src="/IMAGES/developer2.jpg" alt="Danna Castro">
+                                <div class="photo-gradient"></div>
+                            </div>
+                            <div class="member-badge">
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                        </div>
+                        <div class="member-info">
+                            <h3>Danna Castro</h3>
+                            <span class="member-role">Lead Developer</span>
+                            <p class="member-bio">Apasionada por la programación, el diseño y el kpop. Programadora Fullstack, especialista en frontend.</p>
+                            <div class="member-skills">
+                                <span class="skill-tag">HTML</span>
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">CSS</span>
+                            </div>
+                            <div class="social-links">
+                                <a href="https://github.com/dannaCas" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                                <a href="#" title="Notion"><i class="fa-brands fa-notion"></i></a>
+                                <a href="#" title="Email"><i class="fa-solid fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+
+                <!-- TARJETA 2 -->
+                <div class="team-member-card">
+                    <div class="card-inner">
+                        <div class="member-photo">
+                            <div class="photo-container">
+                                <img src="/IMAGES/developer1.jpg" alt="Isabel Alvarado">
+                                <div class="photo-gradient"></div>
+                            </div>
+                            <div class="member-badge">
+                                <i class="fa-solid fa-paintbrush"></i>
+                            </div>
+                        </div>
+                        <div class="member-info">
+                            <h3>Isabel Alvarado</h3>
+                            <span class="member-role">Frontend Designer</span>
+                            <p class="member-bio">#. Programadora Fullstack, especialista en frontend.</p>
+                            <div class="member-skills">
+                                <span class="skill-tag">HTML</span>
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">CSS</span>
+                            </div>
+                            <div class="social-links">
+                                <a href="https://github.com/isabelAlvarado" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                                <a href="#" title="Notion"><i class="fa-brands fa-notion"></i></a>
+                                <a href="#" title="Email"><i class="fa-solid fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+
+                <!-- TARJETA 3 -->
+                <div class="team-member-card">
+                    <div class="card-inner">
+                        <div class="member-photo">
+                            <div class="photo-container">
+                                <img src="/IMAGES/developer4.jpg" alt="Andrés Zuleta">
+                                <div class="photo-gradient"></div>
+                            </div>
+                            <div class="member-badge">
+                                <i class="fa-solid fa-server"></i>
+                            </div>
+                        </div>
+                        <div class="member-info">
+                            <h3>César Malanco</h3>
+                            <span class="member-role">Backend Developer</span>
+                            <p class="member-bio">#. Programador Fullstack, especialista en backend.</p>
+                            <div class="member-skills">
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">MySQL</span>
+                            </div>
+                            <div class="social-links">
+                                <a href="https://github.com/cesarMalanco" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                                <a href="#" title="Notion"><i class="fa-brands fa-notion"></i></a>
+                                <a href="#" title="Email"><i class="fa-solid fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+
+                <!-- TARJETA 4 -->
+                <div class="team-member-card">
+                    <div class="card-inner">
+                        <div class="member-photo">
+                            <div class="photo-container">
+                                <img src="/IMAGES/developer3.jpg" alt="Fer Vela">
+                                <div class="photo-gradient"></div>
+                            </div>
+                            <div class="member-badge">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                        </div>
+                        <div class="member-info">
+                            <h3>Fernanda Uribe</h3>
+                            <span class="member-role">Project Manager</span>
+                            <p class="member-bio">#. Programadora Fullstack, especialista en backend.</p>
+                            <div class="member-skills">
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">MySQL</span>
+                            </div>
+                            <div class="social-links">
+                                <a href="https://github.com/cfervela" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                                <a href="#" title="Notion"><i class="fa-brands fa-notion"></i></a>
+                                <a href="#" title="Email"><i class="fa-solid fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN DE VALORES  -->
+            <div class="team-values">
+                <div class="section-header">
+                    <h2 class="values-title">Nuestros valores</h2>
+                    <p class="values-subtitle">Los principios que guían nuestro trabajo</p>
+                </div>
+                <div class="values-grid four-values">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <h3>Innovación constante</h3>
+                        <p>Creamos experiencias únicas que fusionan tecnología, el sonido y la comodidad.</p>
+                        <div class="value-decoration"></div>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <h3>Pasión musical</h3>
+                        <p>Cada línea de código está escrita al ritmo de nuestra música favorita.</p>
+                        <div class="value-decoration"></div>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <h3>Visión futurista</h3>
+                        <p>Combinamos estética retro con tecnología futurista para crear algo único.</p>
+                        <div class="value-decoration"></div>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fa-solid fa-users-gear"></i>
+                        </div>
+                        <h3>Trabajo en equipo</h3>
+                        <p>Colaboración sincronizada y rítmica.</p>
+                        <div class="value-decoration"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>Rythmo</h3>
+                        <p>Tu tienda de música de confianza desde 1975.</p>
+                    </div>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/codepath_certs?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces rápidos</h4>
+                    <ul>
+                        <li><a href="/PAGES/index.html">Inicio</a></li>
+                        <li><a href="/PAGES/catalogo.html">Catálogo</a></li>
+                        <li><a href="/PAGES/nosotros.html">Nosotros</a></li>
+                        <li><a href="/PAGES/contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="/PAGES/contact.html">Restauración</a></li>
+                        <li><a href="/PAGES/contact.html">Valuación</a></li>
+                        <li><a href="/PAGES/contact.html">Envíos</a></li>
+                        <li><a href="/PAGES/contact.html">Garantía</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Calle Vintage 123, Ciudad</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-envelope"></i> noreply.rythmo@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                 <p>&copy; 2025 Rythmo. Trabajo escolar – Uso académico no comercial.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="/JS/cartUtils.js"></script>
+    <script src="/JS/wishlistUtils.js"></script>
+    <script src="/JS/acces_script.js"></script>
+</body>
+</html>

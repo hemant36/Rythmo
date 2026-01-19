@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rythmo | Pago en OXXO</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <link rel="stylesheet" href="/CSS/paymentOXXO.css">
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <main class="oxxo-container">
+        <!-- ICONO ACCESIBILIDAD -->
+        <div id="accessibility-icon" class="nav-link search" title="Accesibilidad"><i class="fa-solid fa-paintbrush"></i></div>
+        <!-- PANEL ACCESIBILIDAD -->
+        <div id="accessibility-panel" class="hidden">
+            <p><strong>Accesibilidad</strong></p>
+        
+            <button id="increase-text">A+</button>
+            <button id="decrease-text">A-</button>
+            <br><br>
+        
+            <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+
+            <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+            <br><br>
+                
+            <button id="reset-accessibility">Restablecer</button>
+        </div>
+
+        <h2 class="title">
+            Por favor <span class="highlight">escanea este código de barras</span> en cualquier tienda OXXO para completar tu pago dentro de 
+            <span id="timer" class="timer">Cargando...</span>
+        </h2>
+
+        <div class="order-info">
+            <span>Total del pedido: <strong id="order-total">MX$0.00</strong></span>
+        </div>
+
+        <!-- Cuadro blanco -->
+        <div class="barcode-box">
+            <img src="/IMAGES/bar_code.png" alt="Código de barras">
+            <p id="barcode-number">2510042748740009</p>
+        </div>
+
+        <p class="refresh-text">Tu recibo será enviado a tu correo electrónico</p>
+
+        <div class="info-box">
+            <p>
+                <strong>Si no has pagado</strong> en una tienda OXXO, cambia tu método de pago para usar 
+                <strong>tarjeta de crédito/débito</strong> o <strong>transferencia bancaria</strong>.
+            </p>
+        </div>
+        
+        <div class="oxxo-actions">
+            <a href="/PAGES/generalPayment.html" class="btn-change">
+                <i class="fa-solid fa-arrow-left"></i> Cambiar método de pago
+            </a>
+            <a href="/PAGES/index.html" class="btn-home">
+                <i class="fa-solid fa-home"></i> Volver al inicio
+            </a>
+            <button onclick="cancelCurrentOxxoPayment()" class="btn-cancel">
+                <i class="fa-solid fa-times"></i> Cancelar este pago
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Aquí incluyes tu FOOTER -->
+    <div id="footer"></div>
+
+    <script src="/JS/currencyUtils.js"></script>
+    <script src="/JS/pagos_script.js"></script>
+    <script>
+        // Variables globales
+        let oxxoOrderCreated = false;
+        
+        // Mostrar el total del pedido
+        async function displayOxxoTotal() {
+            // Cargar currency del usuario
+            if (typeof loadUserCurrency === "function") {
+                await loadUserCurrency();
+            }
+            const userCurrency = typeof getUserCurrency === "function" ? getUserCurrency() : { code: "MXN", symbol: "$" };
+            
+            const checkoutData = JSON.parse(localStorage.getItem('checkoutData') || '{}');
+            const totalElement = document.getElementById('order-total');
+            
+            if (totalElement && checkoutData.total) {
+                const fmtPrice = typeof formatPrice === "function" ? formatPrice(checkoutData.total) : `${userCurrency.symbol}${parseFloat(checkoutData.total).toFixed(2)}`;
+                totalElement.textContent = `${fmtPrice} ${userCurrency.code}`;
+            } else if (totalElement) {
+                // Si no hay datos de checkout, redirigir al carrito
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No hay información del pedido. Por favor regresa al carrito.',
+                    icon: 'error',
+                    confirmButtonColor: '#8B5E3C'
+                }).then(() => {
+                    window.location.href = '/PAGES/cart.html';
+                });
+            }
+        }
+        
+        // Crear orden OXXO cuando inicia el timer
+        async function createOxxoOrder() {
+            if (oxxoOrderCreated) return;
+            
+            const barcodeNumber = document.getElementById('barcode-number')?.textContent;
+            
+            try {
+                const result = await processOxxoOrder(barcodeNumber);
+                
+                if (result.success) {
+                    oxxoOrderCreated = true;
+                    console.log('Orden OXXO creada:', result.orderNumber);
+                } else {
+                    console.error('Error al crear orden OXXO:', result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
+        // Verificar si venimos de confirmar el pago
+        document.addEventListener('DOMContentLoaded', function() {
+            displayOxxoTotal();
+            
+            const shouldStartTimer = sessionStorage.getItem('startOxxoTimer');
+            
+            if (shouldStartTimer === 'true') {
+                // Limpiar el flag
+                sessionStorage.removeItem('startOxxoTimer');
+                // Iniciar el timer y crear la orden
+                startOxxoTimer();
+                createOxxoOrder();
+            } else {
+                // Solo cargar timer existente si hay uno
+                loadExistingOxxoTimer();
+            }
+        });
+        
+        // Función para cancelar el pago actual
+        function cancelCurrentOxxoPayment() {
+            Swal.fire({
+                title: '¿Cancelar pago OXXO?',
+                text: 'El código de barras será invalidado y tendrás que generar uno nuevo.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, cancelar pago',
+                cancelButtonText: 'No, mantener',
+                confirmButtonColor: '#8B5E3C',
+                cancelButtonColor: '#6c757d',
+                background: '#F8F3EB',
+                color: '#2B1E14'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    cancelOxxoTimer();
+                    Swal.fire({
+                        title: 'Pago cancelado',
+                        text: 'Serás redirigido a la selección de método de pago.',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        background: '#F8F3EB',
+                        color: '#2B1E14'
+                    }).then(() => {
+                        window.location.href = '/PAGES/generalPayment.html';
+                    });
+                }
+            });
+        }
+    </script>
+    <script src="/JS/acces_script.js"></script>
+</body>
+</html>

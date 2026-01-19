@@ -1,0 +1,425 @@
+:root {
+    --primary: #8B5E3C;
+    --primary-dark: #593825;
+    --primary-light: #B08D6B;
+
+    --accent: #C25454;
+    --accent-dark: #A14343;
+    --accent-soft: #ECDCC7;
+
+    --vibrant-1: #B44242;
+    --vibrant-2: #8B5E3C;
+    --vibrant-3: #A28B5C;
+
+    --bg-light: #F4EDE3;
+    --bg-light-alt: #E8D9C8;
+
+    --text-dark: #2B1E14;
+    --text-muted: #6A574B;
+    --text-light: #8A7866;
+
+    --card-bg: #F8F3EB;
+    --white: #FFFFFF;
+    --black: #1C1715;
+
+    --shadow: 0 4px 12px rgba(75, 45, 20, 0.12);
+    --shadow-hover: 0 8px 24px rgba(75, 45, 20, 0.18);
+    --radius: 14px;
+}
+
+/* ======== MODO OSCURO ESTILO NEÓN ======== */
+.dark-mode {
+    /* Fondo general estilo club oscuro */
+    --bg-light: #0b0e1a;
+    --bg-light-alt: #11162a;
+
+    /* Texto brillante */
+    --text-dark: #f2f2f7;
+    --text-muted: #9aa4c4;
+
+    /* Tarjetas oscuras con luz tenue */
+    --card-bg: #14182b;
+
+    /* Neon primario (rosa-fucsia) */
+    --primary: #ff2cdf;
+    --primary-dark: #b6009c;
+    --primary-light: #ff6bf4;
+
+    /* Neon secundario (azul eléctrico) */
+    --accent: #1dc8ff;
+    --accent-dark: #1497c2;
+    --accent-soft: #0b223a;
+
+    /* Otros tonos vibrantes */
+    --vibrant-1: #ff00e6; 
+    --vibrant-2: #1bc2ff; 
+    --vibrant-3: #05ffa1; 
+
+    /* Luz de sombra estilo neón */
+    --shadow: 0 0 12px rgba(255, 0, 255, 0.3),
+              0 0 20px rgba(0, 200, 255, 0.25);
+
+    --shadow-hover: 0 0 18px rgba(255, 0, 255, 0.5),
+                    0 0 28px rgba(0, 200, 255, 0.4);
+
+    --shadow-large: 0 0 35px rgba(255, 0, 255, 0.4),
+                    0 0 60px rgba(0, 200, 255, 0.4);
+
+    /* Iconos blancos con brillo */
+    --black: #f5f8ff;
+    --white: #06070d;
+}
+
+/* EFECTO DE BRILLO PARA HOVERS EN MODO OSCURO */
+.dark-mode .btn,
+.dark-mode .login-btn,
+.dark-mode .add-to-cart,
+.dark-mode .add-to-wishlist,
+.dark-mode .product-card,
+.dark-mode .navbar a {
+    box-shadow: 0 0 8px rgba(255, 0, 255, 0.4),
+                0 0 12px rgba(0, 200, 255, 0.3);
+    transition: 0.3s ease;
+}
+
+.dark-mode .btn:hover,
+.dark-mode .login-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 0 12px rgba(255, 0, 255, 0.7),
+                0 0 20px rgba(0, 200, 255, 0.6);
+}
+
+/* Iconos neón */
+.dark-mode i {
+    text-shadow: 0 0 8px rgba(29, 200, 255, 0.8),
+                 0 0 15px rgba(255, 44, 223, 0.6);
+}
+
+/* SWEETALERT – MODO OSCURO */
+.dark-mode .swal2-popup {
+    background: var(--card-bg) !important;
+    color: var(--text-dark) !important;
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    box-shadow:
+        0 0 12px rgba(255,0,255,0.4),
+        0 0 25px rgba(29,200,255,0.3);
+}
+
+.dark-mode .swal2-title {
+    color: var(--vibrant-2) !important;
+    text-shadow: 0 0 10px var(--vibrant-1);
+}
+
+.dark-mode .swal2-html-container {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .swal2-confirm {
+    background: var(--primary) !important;
+    color: var(--black) !important;
+    box-shadow:
+        0 0 8px rgba(255,0,255,0.5),
+        0 0 14px rgba(0,200,255,0.4);
+}
+
+.dark-mode .swal2-cancel {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+}
+
+
+body {
+    font-family: "Poppins", Arial, sans-serif;
+    background: var(--bg-light);
+    margin: 0 auto;
+    color: var(--text-dark);
+}
+
+.oxxo-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 0;
+}
+
+/* TÍTULOS Y TEXTOS*/
+.title {
+    font-size: 1.5rem;
+    text-align: center;
+    color: var(--primary-dark);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.highlight {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.timer {
+    color: var(--vibrant-1);
+    font-weight: bold;
+}
+
+/* INFORMACIÓN PRINCIPAL*/
+.order-info {
+    text-align: center;
+    margin: 5px 0 25px;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.oxxo-logo {
+    height: 26px;
+    vertical-align: middle;
+}
+
+/* CAJA DEL CÓDIGO DE BARRAS*/
+.barcode-box {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    border: 2px solid var(--primary-light);
+}
+
+#barcode {
+    width: 100%;
+}
+
+#barcode-number {
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    margin-top: 15px;
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+
+.refresh-text {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* INFO EXTRA*/
+.info-box {
+    background: var(--accent-soft);
+    padding: 18px;
+    border-radius: var(--radius);
+    margin: 25px 0;
+    border-left: 6px solid var(--accent);
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+.cards-icon {
+    height: 22px;
+    vertical-align: middle;
+}
+
+/* BOTONES */
+.oxxo-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-change {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
+    text-align: center;
+    padding: 16px;
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-change:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-cancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    background: transparent;
+    color: var(--accent);
+    text-align: center;
+    padding: 14px;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid var(--accent);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: var(--accent);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.btn-home {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--vibrant-3), var(--primary-light));
+    color: var(--white);
+    text-align: center;
+    padding: 16px;
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-home:hover {
+    background: linear-gradient(135deg, var(--primary-light), var(--vibrant-3));
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* ======== ACCESIBILIDAD ======== */
+/* ============================
+   PANEL DE ACCESIBILIDAD (RETRO + NEÓN)
+============================ */
+#accessibility-icon {
+    text-align: center;
+}
+/* Panel en modo claro (tema café retro) */
+#accessibility-panel {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: var(--white);
+    padding: 1rem;
+    width: 12rem;
+    border: 1px solid var(--accent-soft);
+    border-radius: 0.6rem;
+    z-index: 9999;
+    box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.15);
+    transition: var(--transition);
+}
+
+#accessibility-panel p strong {
+    color: var(--primary);
+    font-size: 1.05rem;
+}
+
+/* Botones retro */
+#accessibility-panel button {
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.4rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin: 3px 0;
+    width: 45%;
+    transition: var(--transition);
+    box-shadow: 0 3px 10px rgba(139,94,60,0.25);
+}
+
+#accessibility-panel button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* Botón restablecer */
+#reset-accessibility {
+    width: 100% !important;
+    margin-top: 0.6rem;
+    background: var(--accent);
+    box-shadow: 0 3px 10px rgba(194,84,84,0.25);
+}
+
+#reset-accessibility:hover {
+    background: var(--accent-dark);
+}
+
+/* Iconos dentro de botones */
+#accessibility-panel i {
+    font-size: 1rem;
+}
+
+
+/* ============================
+   MODO OSCURO – ESTILO NEÓN
+============================ */
+
+.dark-mode #accessibility-panel {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,0,255,0.25);
+    box-shadow:
+        0 0 12px rgba(255,0,255,0.4),
+        0 0 20px rgba(0,200,255,0.3);
+}
+
+/* Título neón */
+.dark-mode #accessibility-panel p strong {
+    color: var(--vibrant-2);
+    text-shadow: 0 0 8px var(--vibrant-1);
+}
+
+/* Botones neón */
+.dark-mode #accessibility-panel button {
+    background: var(--primary);
+    box-shadow:
+        0 0 10px rgba(255,0,255,0.5),
+        0 0 15px rgba(0,200,255,0.3);
+    color: var(--black);
+}
+
+.dark-mode #accessibility-panel button:hover {
+    background: var(--primary-light);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow:
+        0 0 14px rgba(255,0,255,0.8),
+        0 0 22px rgba(0,200,255,0.6);
+}
+
+/* Botón restablecer en neón */
+.dark-mode #reset-accessibility {
+    background: var(--accent);
+    box-shadow:
+        0 0 10px rgba(29,200,255,0.5),
+        0 0 20px rgba(255,44,223,0.4);
+}
+
+.dark-mode #reset-accessibility:hover {
+    background: var(--accent-dark);
+}
+
+/* Iconos iluminados */
+.dark-mode #accessibility-panel i {
+    color: var(--vibrant-3);
+    text-shadow:
+        0 0 10px rgba(29,200,255,0.7),
+        0 0 20px rgba(255,44,223,0.5);
+}
+
+.hidden {
+    display: none;
+}

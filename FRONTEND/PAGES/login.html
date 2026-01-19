@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Rythmo</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/loginStyles.css">
+</head>
+
+<body>
+    <a href="/PAGES/index.html" class="back-home">
+        <i class="fa-solid fa-arrow-left"></i> Volver a inicio
+    </a>
+
+    <div class="login-container">
+
+    <!-- PANEL IZQUIERDO - DISCO DE VINILO -->
+    <div class="login-left">
+        <div class="vinyl-container">
+            <div class="vinyl-large">
+                <div class="vinyl-details">
+                    <div class="vinyl-label">
+                        <span>RYTHMO</span>
+                        <span>Music Store</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="left-menu">
+            <button class="menu-item active" data-mode="login">LOGIN</button>
+            <button class="menu-item" data-mode="register">SIGN IN</button>
+        </div>
+    </div>
+
+    <!-- PANEL DERECHO - FORMULARIO -->
+    <div class="login-right">
+        
+        <div class="form-container">
+            <h1 class="login-title">BIENVENIDO</h1>
+            <p class="login-subtitle">Inicia sesión en tu cuenta</p>
+
+            <form class="login-form">
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input id="email" type="email" placeholder="Email" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input id="password" type="password" placeholder="Contraseña" required>
+                </div>
+                
+                <div class="input-group">
+                    <div id="captchaContainer"></div>
+                    <input type="text" id="captchaInput" placeholder="Escribe el texto del captcha">
+                    
+                </div>
+                
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input id="rememberMe" type="checkbox">
+                        <span class="checkmark"></span>
+                        Recordarme
+                    </label>
+                    <a href="/PAGES/resetpassword.html" class="forgot">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button id="login-btn" class="btn-login">INICIAR SESIÓN</button>
+
+            </form>
+
+            <p class="register-link">
+                ¿No tienes una cuenta? <a href="#">Regístrate aquí</a>
+            </p>
+        </div>
+
+        <!-- FORMULARIO DE REGISTRO (OCULTO AL INICIO) -->
+        <div class="form-container register-form hidden">
+            <h1 class="login-title">CREAR CUENTA</h1>
+            <p class="login-subtitle">Regístrate para continuar</p>
+
+            <form>
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" placeholder="Nombre completo" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" placeholder="Email" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" placeholder="Contraseña" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input id="registerPasswordConfirm" type="password" placeholder="Confirmar Contraseña" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-globe"></i>
+                    <select id="country" required>
+                        <option value="" disabled selected>Selecciona tu país</option>
+                        <option value="MX">México (MXN)</option>
+                        <option value="US">Estados Unidos (USD)</option>
+                        <option value="ES">España (EUR)</option>
+                        <option value="CO">Colombia (COP)</option>
+                        <option value="AR">Argentina (ARS)</option>
+                        <option value="CL">Chile (CLP)</option>
+                        <option value="PE">Perú (PEN)</option>
+                        <option value="GT">Guatemala (GTQ)</option>
+                        <option value="BR">Brasil (BRL)</option>
+                        <option value="CA">Canadá (CAD)</option>
+                    </select>
+                </div>
+                
+                <button class="btn-login">REGISTRARME</button>
+            </form>
+
+            <p class="register-link">
+                ¿Ya tienes una cuenta? <a href="#" class="go-login">Inicia sesión aquí</a>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuItems = document.querySelectorAll('.menu-item');
+    const vinylContainer = document.querySelector('.vinyl-container');
+
+    const loginForm = document.querySelector('.form-container:not(.register-form)');
+    const registerForm = document.querySelector('.register-form');
+
+    const goLoginLink = document.querySelector('.go-login');
+
+    function activate(mode) {
+        // Cambiar menú con animación
+        menuItems.forEach(i => {
+            i.classList.remove('active');
+            i.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        });
+        
+        const activeItem = document.querySelector(`.menu-item[data-mode="${mode}"]`);
+        activeItem.classList.add('active');
+
+        // Animación del disco de vinilo
+        if (mode === "register") {
+            vinylContainer.classList.add('move-right');
+        } else {
+            vinylContainer.classList.remove('move-right');
+        }
+
+        // Animación de transición entre formularios
+        if (mode === "register") {
+            // Ocultar login con animación
+            loginForm.classList.add('hidden');
+            // Pequeño delay para que la animación sea visible
+            setTimeout(() => {
+                registerForm.classList.remove('hidden');
+            }, 200);
+        } else {
+            // Ocultar registro con animación
+            registerForm.classList.add('hidden');
+            // Pequeño delay para que la animación sea visible
+            setTimeout(() => {
+                loginForm.classList.remove('hidden');
+            }, 200);
+        }
+    }
+
+    // Clics en menú
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            if (!this.classList.contains('active')) {
+                activate(this.dataset.mode);
+            }
+        });
+    });
+
+    // Link dentro del formulario de registro
+    if (goLoginLink) {
+        goLoginLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            activate("login");
+        });
+    }
+
+    // Link dentro del formulario de login
+    const registerLink = document.querySelector('.register-link a:not(.go-login)');
+    if (registerLink) {
+        registerLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            activate("register");
+        });
+    }
+});
+</script>
+<script src="/JS/acces_script.js"></script>
+<script src="/JS/register_script.js"></script>
+<script src="/JS/login_script.js"></script>
+
+
+</body>
+</html>

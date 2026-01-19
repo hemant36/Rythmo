@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rythmo | Métodos de Pago</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/generalPayStyles.css"/>
+</head>
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <span><i class="fa-solid fa-phone"></i> +320 9254 021</span>
+            <span><i class="fa-solid fa-envelope"></i> ejemplo.mail@info.com</span>
+        </div>
+
+        <div class="top-right">
+            <div class="header-icons">
+                <!-- WISHLIST -->
+                <a href="/PAGES/wishlist.html" class="header-icon wishlist" title="Lista de deseos">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+
+                <!-- CARRITO CON BADGE -->
+                <a href="/PAGES/cart.html" class="header-icon cart" title="Carrito de compras">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count" id="cart-badge" style="display: none;">0</span>
+                </a>
+                <!-- USUARIO LOGUEADO O LOGIN -->
+                <span id="user-name" class="welcome-user" style="display:none"></span>
+                <button id="logout-btn" class="login-btn" style="display:none">Cerrar sesión</button>
+                <a href="login.html" class="login-btn" id="login-btn-link">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                // Verificar token y nombre de usuario en ambos almacenamientos
+                let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+                let name = localStorage.getItem("userName") || sessionStorage.getItem("userName");
+                let currentUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+                if (token && name && currentUser) {
+                    document.getElementById("user-name").textContent = `Bienvenido@, ${name}`;
+                    document.getElementById("user-name").style.display = "inline-block";
+                    document.getElementById("logout-btn").style.display = "inline-block";
+                    document.getElementById("login-btn-link").style.display = "none";
+                } else {
+                    document.getElementById("user-name").style.display = "none";
+                    document.getElementById("logout-btn").style.display = "none";
+                    document.getElementById("login-btn-link").style.display = "inline-block";
+                }
+                // Logout
+                document.getElementById("logout-btn").addEventListener("click", function() {
+                    Swal.fire({
+                        title: "¿Estás seguro de que quieres cerrar sesión?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí, cerrar sesión",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token");
+                            localStorage.removeItem("userName");
+                            localStorage.removeItem("currentUser");
+                            sessionStorage.removeItem("token");
+                            sessionStorage.removeItem("userName");
+                            sessionStorage.removeItem("currentUser");
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sesión cerrada",
+                                text: "Has cerrado sesión correctamente.",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            setTimeout(function() {
+                                window.location.href = "/PAGES/index.html";
+                            }, 1500);
+                        }
+                    });
+                });
+            </script>
+            <div class="logo">
+                <img src="/IMAGES/TiredCat_No-bg.png" alt="Logo Rythmo" />
+                <div class="logo-text">
+                    <h1>Rythmo</h1>
+                    <span class="slogan">WE BELIEVE IN MUSIC.</span>
+                </div>
+            </div>
+
+            <!-- NAV BAR -->
+            <nav class="navbar">
+                <a class="nav-link" href="/PAGES/index.html">Inicio</a>
+                <a class="nav-link" href="/PAGES/catalogo.html">Catálogo</a>
+                <a class="nav-link" href="#about">Nosotros</a>
+                <a class="nav-link" href="/PAGES/contact.html">Contacto</a>
+                <a class="nav-link" href="/PAGES/faq.html">FAQ</a>
+                <!-- ICONO ACCESIBILIDAD -->
+                <div id="accessibility-icon" class="nav-link search" title="Buscar"><i class="fa-solid fa-paintbrush"></i></div>
+                <!-- PANEL ACCESIBILIDAD -->
+                <div id="accessibility-panel" class="hidden">
+                    <p><strong>Accesibilidad</strong></p>
+                    <button id="increase-text">A+</button>
+                    <button id="decrease-text">A-</button>
+                    <br><br>
+                    <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+                    <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+                    <br><br>
+                    <button id="reset-accessibility">Restablecer</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+        <!-- CONTENIDO PRINCIPAL DE PAGO -->
+    <div class="checkout-container">
+        <div class="payment-content">
+            <!-- MIGAS DE PAN -->
+            <div class="breadcrumb">
+                <a href="/PAGES/index.html">Inicio</a>
+                <span class="separator">></span>
+                <a href="/PAGES/cart.html">Carrito</a>
+                <span class="separator">></span>
+                <a href="/PAGES/address.html">Confirma tu dirección</a>
+                <span class="separator">></span>
+                <span class="current">Método de Pago</span>
+            </div>
+
+            <!-- MÉTODOS DE PAGO -->
+            <div class="payment-methods">
+                <h2><i class="fa-solid fa-credit-card"></i> Selecciona tu método de pago</h2>
+                <p class="payment-subtitle">Elige la forma que más te convenga para completar tu compra</p>
+
+                <div class="payment-options">
+                    <!-- TARJETA -->
+                    <div class="payment-option" onclick="selectPayment('card')">
+                        <div class="payment-icon">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <div class="payment-info">
+                            <h3>Tarjeta de Crédito/Débito</h3>
+                            <p>Paga de forma segura con tu tarjeta</p>
+                            <div class="payment-badges">
+                                <span class="badge">Visa</span>
+                                <span class="badge">Mastercard</span>
+                                <span class="badge">Amex</span>
+                            </div>
+                        </div>
+                        <div class="payment-arrow">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <!-- OXXO -->
+                    <div class="payment-option" onclick="selectPayment('oxxo')">
+                        <div class="payment-icon">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <div class="payment-info">
+                            <h3>Pago en OXXO</h3>
+                            <p>Paga en efectivo en cualquier tienda OXXO</p>
+                            <div class="payment-features">
+                                <span class="feature"><i class="fa-solid fa-clock"></i> Válido por 72 horas</span>
+                                <span class="feature"><i class="fa-solid fa-receipt"></i> Recibo impreso</span>
+                            </div>
+                        </div>
+                        <div class="payment-arrow">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <!-- TRANSFERENCIA -->
+                    <div class="payment-option" onclick="selectPayment('transfer')">
+                        <div class="payment-icon">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <div class="payment-info">
+                            <h3>Transferencia Bancaria</h3>
+                            <p>Transfiere desde tu banca en línea</p>
+                            <div class="payment-badges">
+                                <span class="badge">BBVA</span>
+                                <span class="badge">Santander</span>
+                                <span class="badge">Banamex</span>
+                            </div>
+                        </div>
+                        <div class="payment-arrow">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTÓN DE CONFIRMACIÓN -->
+                <div class="payment-confirm">
+
+                    <p class="security-note">
+                        <i class="fa-solid fa-shield-alt"></i>
+                        Tus datos están protegidos 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>Rythmo</h3>
+                        <p>Tu tienda de música de confianza desde 1975.</p>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces rápidos</h4>
+                    <ul>
+                        <li><a href="/PAGES/index.html">Inicio</a></li>
+                        <li><a href="/PAGES/catalogo.html">Catálogo</a></li>
+                        <li><a href="#about">Nosotros</a></li>
+                        <li><a href="/PAGES/contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#">Restauración</a></li>
+                        <li><a href="#">Valuación</a></li>
+                        <li><a href="#">Envíos</a></li>
+                        <li><a href="#">Garantía</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Calle Vintage 123, Ciudad</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-envelope"></i> info@rythmo.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                 <p>&copy; 2025 Rythmo. Trabajo escolar – Uso académico no comercial.</p>
+            </div>
+        </div>
+    </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        let selectedPayment = null;
+
+        function selectPayment(method) {
+            // Remover selección anterior
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+        const selectedOption = event.currentTarget;
+        selectedOption.classList.add('selected');
+        selectedPayment = method;
+
+        setTimeout(() => {
+            switch(method) {
+                case 'card':
+                    window.location.href = '/PAGES/paymentCard.html';
+                    break;
+                case 'oxxo':
+                    Swal.fire({
+                        title: '¿Confirmar pago en OXXO?',
+                        html: `<p>Se generará un código de barras válido por <strong>72 horas</strong>.</p>`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, generar código',
+                        cancelButtonText: 'Cancelar',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            sessionStorage.setItem('startOxxoTimer', 'true');
+                            window.location.href = '/PAGES/paymentOXXO.html';
+                        } else {
+                            selectedOption.classList.remove('selected');
+                            selectedPayment = null;
+                        }
+                    });
+                    break;
+                case 'transfer':
+                    window.location.href = '/PAGES/transfer.html';
+                    break;
+            }
+        }, 300);
+    }
+
+        // Efecto hover 
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            option.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+
+    <script src="/JS/cartUtils.js"></script>
+    <script src="/JS/acces_script.js"></script>
+</body>
+</html>

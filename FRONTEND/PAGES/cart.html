@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rythmo | Carrito</title>
+    <link rel="icon" type="image/png" href="/IMAGES/logo_darkmode.png"/>
+    <script src="https://kit.fontawesome.com/d90850e71e.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/cartStyles.css">
+</head>
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <span><i class="fa-solid fa-phone"></i> +320 9254 021</span>
+            <span><i class="fa-solid fa-envelope"></i> ejemplo.mail@info.com</span>
+        </div>
+
+        <div class="top-right">
+            <div class="header-icons">
+                <!-- WISHLIST -->
+                <a href="/PAGES/wishlist.html" class="header-icon wishlist" id="wishlist-icon" title="Lista de deseos" style="display:none">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+
+                <!-- CARRITO CON BADGE -->
+                <a href="/PAGES/cart.html" class="header-icon cart" id="cart-icon" title="Carrito de compras" style="display:none">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count" id="cart-badge" style="display: none;">0</span>
+                </a>
+                <!-- USUARIO LOGUEADO O LOGIN -->
+                <span id="user-name" class="welcome-user" style="display:none"></span>
+                <button id="logout-btn" class="login-btn" style="display:none">Cerrar sesión</button>
+                <a href="login.html" class="login-btn" id="login-btn-link">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+        <div class="header-container">
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                // Verificar token y nombre de usuario en ambos almacenamientos
+                let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+                let name = localStorage.getItem("userName") || sessionStorage.getItem("userName");
+                let currentUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+                if (token && name && currentUser) {
+                    document.getElementById("user-name").textContent = `Bienvenido@, ${name}`;
+                    document.getElementById("user-name").style.display = "inline-block";
+                    document.getElementById("logout-btn").style.display = "inline-block";
+                    document.getElementById("login-btn-link").style.display = "none";
+                    document.getElementById("wishlist-icon").style.display = "inline-block";
+                    document.getElementById("cart-icon").style.display = "inline-block";
+                } else {
+                    document.getElementById("user-name").style.display = "none";
+                    document.getElementById("logout-btn").style.display = "none";
+                    document.getElementById("login-btn-link").style.display = "inline-block";
+                    document.getElementById("wishlist-icon").style.display = "none";
+                    document.getElementById("cart-icon").style.display = "none";
+                }
+                // Logout
+                document.getElementById("logout-btn").addEventListener("click", function() {
+                    Swal.fire({
+                        title: "¿Estás seguro de que quieres cerrar sesión?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sí, cerrar sesión",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem("token");
+                            localStorage.removeItem("userName");
+                            localStorage.removeItem("currentUser");
+                            sessionStorage.removeItem("token");
+                            sessionStorage.removeItem("userName");
+                            sessionStorage.removeItem("currentUser");
+                            Swal.fire({
+                                icon: "success",
+                                title: "Sesión cerrada",
+                                text: "Has cerrado sesión correctamente.",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            setTimeout(function() {
+                                window.location.href = "/PAGES/index.html";
+                            }, 1500);
+                        }
+                    });
+                });
+            </script>
+            <div class="logo">
+                <img src="/IMAGES/logo.png" alt="Logo Rythmo" />
+                <div class="logo-text">
+                    <h1>Rythmo</h1>
+                    <span class="slogan">WE BELIEVE IN MUSIC.</span>
+                </div>
+            </div>
+
+            <!-- NAV BAR -->
+            <nav class="navbar">
+                <a class="nav-link" href="/PAGES/index.html">Inicio</a>
+                <a class="nav-link" href="/PAGES/catalogo.html">Catálogo</a>
+                <a class="nav-link" href="/PAGES/nosotros.html">Nosotros</a>
+                <a class="nav-link" href="/PAGES/contact.html">Contacto</a>
+                <a class="nav-link" href="/PAGES/faq.html">FAQ</a>
+                <!-- ICONO ACCESIBILIDAD -->
+                <div id="accessibility-icon" class="nav-link search" title="Buscar"><i class="fa-solid fa-paintbrush"></i></div>
+                <!-- PANEL ACCESIBILIDAD -->
+                <div id="accessibility-panel" class="hidden">
+                    <p><strong>Accesibilidad</strong></p>
+                
+                    <button id="increase-text">A+</button>
+                    <button id="decrease-text">A-</button>
+                    <br><br>
+                
+                    <button id="light-mode-btn" title="Modo claro"><i class="fa-solid fa-sun"></i></button>
+
+                    <button id="dark-mode-btn" title="Modo oscuro"><i class="fa-solid fa-moon"></i></button>
+                    <br><br>
+                
+                    <button id="reset-accessibility">Restablecer</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL DEL CARRITO -->
+    <div class="checkout-container">
+        <div class="slides" id="slides">
+
+            <!-- SLIDE 1: CARRITO -->
+            <section class="slide active">
+                <!-- MIGAS DE PAN -->
+                <div class="breadcrumb">
+                    <a href="/PAGES/index.html">Inicio</a>
+                    <span class="separator">></span>
+                    <span class="current">Carrito de Compras</span>
+                </div>
+
+                <div class="cart-layout">
+                    <!-- LISTA DE PRODUCTOS (LLENAR CON LA API) -->
+                    <div class="product-box">
+                        <h2>Tus Productos</h2>
+                        <p class="free-shipping-note" id="free-shipping-note"><i class="fa-solid fa-truck"></i> <span>Cargando información de envío...</span></p>
+                        <div class="products-container" id="products-container">
+                            <!-- Los productos se cargan aquí dinámicamente -->
+                            <div class="empty-cart-message">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <p>Tu carrito está vacío</p>
+                                <a href="/PAGES/catalogo.html" class="btn">Ir al Catálogo</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PANEL DERECHO -->
+                    <div class="sidebar">
+
+                        <!-- CUPONES -->
+                        <div class="side-box">
+                            <h3><i class="fa-solid fa-tag"></i> Cupones</h3>
+                            <button class="btn-coupon general-btn" onclick="toggleCoupon()">Añadir cupón</button>
+                            <div class="coupon-input" id="couponInput">
+                                <input type="text" placeholder="Ingresa tu código" />
+                                <button class="btn-apply general-btn">Aplicar</button>
+                            </div>
+                            <div class="coupon-applied" style="display: none; margin-top: 0.75rem; padding: 0.5rem; background: #e8f5e9; border-radius: 8px;">
+                                <!-- El cupón aplicado se muestra aquí -->
+                            </div>
+                        </div>
+
+                        <!-- REGALO -->
+                        <div class="gift-section">
+                            <div class="gift-header">
+                                <div class="gift-icon">
+                                    <i class="fa-solid fa-gift"></i>
+                                </div>
+                                <h3 class="gift-title">¿Es un regalo?</h3>
+                            </div>
+                            
+                            <div class="gift-content">
+                                <p class="gift-description">Hazlo especial con nuestro envoltorio</p>
+                                
+                                <div class="gift-price" id="gift-wrap-price">$20.00</div>
+                            </div>
+                            
+                            <label class="gift-toggle" for="gift-wrap">
+                                <input type="checkbox" id="gift-wrap">
+                                <div class="gift-switch"></div>
+                                <div class="gift-label">
+                                    <span class="gift-main-label">Agregar envoltura de regalo</span>
+                                </div>
+                            </label>
+                            
+                        </div>
+
+                        <!-- DETALLES DE COMPRA -->
+                        <div class="side-box total-box">
+                            <h3><i class="fa-solid fa-receipt"></i> Detalles de la compra</h3>
+                            <div class="price-details">
+                                <div class="line">
+                                    <span>Subtotal</span>
+                                    <span id="subtotal">$0.00</span>
+                                </div>
+                                <div class="line">
+                                    <span>Envío</span>
+                                    <span id="shipping">$0.00</span>
+                                </div>
+                                <div class="line">
+                                    <span>Envoltura de regalo</span>
+                                    <span id="gift-cost">$0.00</span>
+                                </div>
+                                <div class="line">
+                                    <span>Descuento</span>
+                                    <span id="discount">-$0.00</span>
+                                </div>
+                                <div class="line total">
+                                    <strong>Total</strong>
+                                    <strong id="total">$0.00</strong>
+                                </div>
+                            </div>
+                            <a href="/PAGES/address.html" class="btn-next general-btn">Pagar</a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+        <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <h3>Rythmo</h3>
+                        <p>Tu tienda de música de confianza desde 1975.</p>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces rápidos</h4>
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Catálogo</a></li>
+                        <li><a href="#">Nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#">Restauración</a></li>
+                        <li><a href="#">Valuación</a></li>
+                        <li><a href="#">Envíos</a></li>
+                        <li><a href="#">Garantía</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Calle Vintage 123, Ciudad</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-envelope"></i> info@rythmo.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Rythmo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="/JS/currencyUtils.js"></script>
+    <script src="/JS/cartUtils.js"></script>
+    <script src="/JS/wishlistUtils.js"></script>
+    <script src="/JS/cart_script.js"></script>  
+    <script src="/JS/acces_script.js"></script> 
+</body>
+</html>

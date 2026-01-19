@@ -1,0 +1,744 @@
+    /* ===== PALETA VINTAGE PRINCIPAL ===== */
+    :root {
+        --primary: #8B5E3C;        /* Café cálido retro */
+        --primary-dark: #593825;   /* Café oscuro */
+        --primary-light: #B08D6B;  /* Café claro */
+
+        --accent: #C25454;         /* Rojo retro suave */
+        --accent-dark: #A14343;    /* Rojo oscuro */
+        --accent-soft: #ECDCC7;    /* Crema papel antiguo */
+
+        --vibrant-1: #B44242;      /* Rojo quemado vibrante */
+        --vibrant-2: #8B5E3C;      /* Café rojizo */
+        --vibrant-3: #A28B5C;      /* Beige oliva retro */
+
+        --bg-light: #F4EDE3;       /* Crema suave */
+        --bg-light-alt: #E8D9C8;   /* Crema cálido */
+        
+        --text-dark: #2B1E14;      /* Café chocolate oscuro */
+        --text-muted: #6A574B;     /* Café grisáceo suave */
+        --text-light: #8A7866;     /* Café medio */
+
+        --card-bg: #F8F3EB;        /* Crema muy claro */
+        --white: #FFFFFF;
+        --black: #1C1715;          /* Negro vintage suave */
+
+        --shadow: 0 10px 25px rgba(75, 45, 20, 0.18);
+        --shadow-hover: 0 15px 35px rgba(75, 45, 20, 0.28);
+        --transition: all 0.3s ease;
+    }
+
+    /* ======== MODO OSCURO ESTILO NEÓN ======== */
+    .dark-mode {
+        /* Fondo general estilo club oscuro */
+        --bg-light: #0b0e1a;
+        --bg-light-alt: #11162a;
+
+        /* Texto brillante */
+        --text-dark: #f2f2f7;
+        --text-muted: #9aa4c4;
+
+        /* Tarjetas oscuras con luz tenue */
+        --card-bg: #14182b;
+
+        /* Neon primario (rosa-fucsia) */
+        --primary: #ff2cdf;
+        --primary-dark: #b6009c;
+        --primary-light: #ff6bf4;
+
+        /* Neon secundario (azul eléctrico) */
+        --accent: #1dc8ff;
+        --accent-dark: #1497c2;
+        --accent-soft: #0b223a;
+
+        /* Otros tonos vibrantes */
+        --vibrant-1: #ff00e6; 
+        --vibrant-2: #1bc2ff; 
+        --vibrant-3: #05ffa1; 
+
+        /* Luz de sombra estilo neón */
+        --shadow: 0 0 12px rgba(255, 0, 255, 0.3),
+                  0 0 20px rgba(0, 200, 255, 0.25);
+
+        --shadow-hover: 0 0 18px rgba(255, 0, 255, 0.5),
+                        0 0 28px rgba(0, 200, 255, 0.4);
+
+        --shadow-large: 0 0 35px rgba(255, 0, 255, 0.4),
+                        0 0 60px rgba(0, 200, 255, 0.4);
+
+        /* Iconos blancos con brillo */
+        --black: #f5f8ff;
+        --white: #06070d;
+    }
+
+    /* EFECTO DE BRILLO PARA HOVERS EN MODO OSCURO */
+    .dark-mode .btn,
+    .dark-mode .login-btn,
+    .dark-mode .add-to-cart,
+    .dark-mode .add-to-wishlist,
+    .dark-mode .product-card,
+    .dark-mode .navbar a {
+        box-shadow: 0 0 8px rgba(255, 0, 255, 0.4),
+                    0 0 12px rgba(0, 200, 255, 0.3);
+        transition: 0.3s ease;
+    }
+
+    .dark-mode .btn:hover,
+    .dark-mode .login-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 0 12px rgba(255, 0, 255, 0.7),
+                    0 0 20px rgba(0, 200, 255, 0.6);
+    }
+
+    /* Iconos neón */
+    .dark-mode i {
+        text-shadow: 0 0 8px rgba(29, 200, 255, 0.8),
+                     0 0 15px rgba(255, 44, 223, 0.6);
+    }
+
+    /* Borde neón para tarjetas */
+    .dark-mode .product-card {
+        border: 1px solid rgba(255, 0, 255, 0.2);
+    }
+
+    /* ==========================================================
+          MENÚ IZQUIERDO — FIX + ESTILO NEÓN MODO OSCURO
+    ========================================================== */
+
+    /* Texto base */
+    .dark-mode .menu-item {
+        color: rgba(255, 255, 255, 0.65); /* blanco real, visible */
+        text-shadow: 0 0 6px rgba(0, 200, 255, 0.25);
+    }
+
+    /* Hover */
+    .dark-mode .menu-item:hover {
+        color: var(--accent); /* azul eléctrico */
+        transform: translateX(-6px);
+        text-shadow:
+            0 0 8px rgba(29, 200, 255, 0.7),
+            0 0 14px rgba(29, 200, 255, 0.5);
+    }
+
+
+    .dark-mode .menu-item.active {
+        color: #ffffff; /* blanco real que SIEMPRE contrasta */
+        font-size: 1.6rem;
+        font-weight: 700;
+        text-shadow:
+            0 0 6px rgba(255, 0, 255, 0.8),
+            0 0 12px rgba(0, 200, 255, 0.7),
+            0 0 18px rgba(255, 0, 255, 0.5);
+    }
+
+    .dark-mode .menu-item.active::after {
+        background: #ffffff; /* también blanco para contraste */
+        box-shadow:
+            0 0 10px rgba(255, 255, 255, 0.7),
+            0 0 20px rgba(255, 0, 255, 0.5),
+            0 0 30px rgba(0, 200, 255, 0.4);
+    }
+
+    /* Íconos dentro del menú */
+    .dark-mode .menu-item i {
+        color: var(--accent); /* azul eléctrico */
+    }
+
+    /* SWEETALERT – MODO OSCURO */
+.dark-mode .swal2-popup {
+    background: var(--card-bg) !important;
+    color: var(--text-dark) !important;
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    box-shadow:
+        0 0 12px rgba(255,0,255,0.4),
+        0 0 25px rgba(29,200,255,0.3);
+}
+
+.dark-mode .swal2-title {
+    color: var(--vibrant-2) !important;
+    text-shadow: 0 0 10px var(--vibrant-1);
+}
+
+.dark-mode .swal2-html-container {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .swal2-confirm {
+    background: var(--primary) !important;
+    color: var(--black) !important;
+    box-shadow:
+        0 0 8px rgba(255,0,255,0.5),
+        0 0 14px rgba(0,200,255,0.4);
+}
+
+.dark-mode .swal2-cancel {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+}
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        background: var(--bg-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 20px;
+    }
+
+    /* Fondo con elementos vintage */
+    body::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(139, 94, 60, 0.08) 0%, transparent 70%);
+        top: -100px;
+        right: -100px;
+        z-index: 0;
+    }
+
+    body::after {
+        content: "";
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(194, 84, 84, 0.06) 0%, transparent 70%);
+        bottom: -80px;
+        left: -80px;
+        z-index: 0;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .login-container {
+        width: 1000px;
+        max-width: 95%;
+        height: 650px;
+        max-height: 90vh;
+        background: var(--white);
+        border-radius: 25px;
+        display: flex;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        position: relative;
+        z-index: 1;
+    }
+
+    /* PANEL IZQUIERDO - DISCO DE VINILO */
+    .login-left {
+        width: 45%;
+        background: linear-gradient(135deg, 
+            var(--primary-light) 0%, 
+            var(--primary) 40%, 
+            var(--primary-dark) 100%);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 60px;
+    }
+
+    /* MENÚ */
+    .left-menu {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        text-align: right;
+    }
+
+    .menu-item {
+        background: transparent;
+        border: none;
+        font-size: 1.3rem;
+        color: rgba(255,255,255,0.7);
+        font-weight: 600;
+        cursor: pointer;
+        padding: 12px 0;
+        letter-spacing: 2px;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .menu-item.active {
+        font-size: 1.6rem;
+        color: var(--white);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .menu-item:hover {
+        color: var(--white);
+        transform: translateX(-5px);
+    }
+
+    .menu-item.active::after {
+        content: '';
+        position: absolute;
+        right: -10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 80%;
+        background: var(--white);
+        border-radius: 2px;
+    }
+
+    
+
+    /* Contenedor del disco */
+    .vinyl-container {
+        position: absolute;
+        left: -350px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .vinyl-container.move-right {
+        left: -300px;
+    }
+
+    /* Disco de vinilo grande - medio disco visible */
+    .vinyl-large {
+        width: 700px;
+        height: 700px;
+        border-radius: 50%;
+        background: 
+            radial-gradient(circle at 50% 50%, 
+                #1a1a1a 0%, 
+                #2a2a2a 8%, 
+                #1a1a1a 15%,
+                #000 40%,
+                #1a1a1a 60%,
+                #000 100%);
+        border: 15px solid #2a2a2a;
+        position: relative;
+        box-shadow: 
+            20px 0 40px rgba(0,0,0,0.6),
+            inset 0 0 50px rgba(255,255,255,0.1);
+        animation: rotate 25s linear infinite;
+    }
+
+    /* Detalles del disco */
+    .vinyl-large::before {
+        content: "";
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: 
+            radial-gradient(circle at 30% 30%, 
+                var(--accent) 0%, 
+                var(--accent-dark) 100%);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        box-shadow: 
+            0 0 15px rgba(194, 84, 84, 0.8),
+            inset 0 0 10px rgba(255,255,255,0.2);
+        border: 3px solid rgba(255,255,255,0.1);
+    }
+
+    /* Líneas del disco */
+    .vinyl-large::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: 
+            repeating-radial-gradient(
+                circle at 50% 50%,
+                transparent 0,
+                transparent 8px,
+                rgba(255,255,255,0.05) 8px,
+                rgba(255,255,255,0.05) 9px
+            );
+        animation: rotate 20s linear infinite reverse;
+    }
+
+    /* Etiqueta del disco */
+    .vinyl-details {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 3;
+        text-align: center;
+    }
+
+    .vinyl-label {
+        background: var(--accent);
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.75rem;
+        box-shadow: 
+            0 0 20px rgba(194, 84, 84, 0.6),
+            inset 0 0 10px rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.1);
+        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .vinyl-label span:first-child {
+        font-family: 'Playfair Display', serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .vinyl-label span:last-child {
+        font-size: 0.6rem;
+        opacity: 0.9;
+    }
+
+    /* Animación de rotación */
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* PANEL DERECHO - FORMULARIO */
+    .login-right {
+        width: 55%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 400px;
+        transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .form-container:not(.hidden) {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+
+    .form-container.hidden {
+        opacity: 0;
+        transform: translateY(-50%) scale(0.95);
+        pointer-events: none;
+    }
+
+    /* Títulos */
+    .login-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        color: var(--primary);
+        margin-bottom: 10px;
+        text-align: center;
+        letter-spacing: 1px;
+        transition: var(--transition);
+    }
+
+    .login-subtitle {
+        color: var(--text-muted);
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1.05rem;
+        line-height: 1.5;
+        transition: var(--transition);
+    }
+
+    /* FORMULARIO */
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* INPUTS */
+    .input-group {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid var(--accent-soft);
+        gap: 15px;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .input-group:focus-within {
+        border-bottom-color: var(--accent);
+        transform: translateY(-2px);
+    }
+
+    .input-group i {
+        color: var(--accent);
+        font-size: 1.2rem;
+        width: 20px;
+        transition: var(--transition);
+    }
+
+    .input-group:focus-within i {
+        transform: scale(1.1);
+    }
+
+    .input-group input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 1.05rem;
+        background: transparent;
+        color: var(--text-dark);
+        padding: 5px 0;
+        transition: var(--transition);
+    }
+
+    #country {
+        width: 100%;
+    }
+
+    .input-group input::placeholder {
+        color: var(--text-light);
+        transition: var(--transition);
+    }
+
+    .input-group input:focus::placeholder {
+        opacity: 0.5;
+    }
+
+    .input-group select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: none !important;
+        outline: none !important;
+        background: transparent;
+        color: var(--text-dark);
+        font-size: 1.05rem;
+        font-family: "Poppins", sans-serif;
+        color: var(--text-light);
+    }
+
+    .input-group select:focus,
+    .input-group select:valid {
+        color: var(--text-dark);
+    }
+
+    .input-group select option {
+        background: var(--card-bg);          
+        color: var(--text-dark);             
+        padding: 12px;
+        font-size: 1rem;
+        border-bottom: 1px solid var(--bg-light-alt);
+    }
+
+
+    /* OPCIONES DEL FORMULARIO */
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+
+    .remember-me:hover {
+        color: var(--text-dark);
+    }
+
+    .remember-me input {
+        display: none;
+    }
+
+    .checkmark {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--accent-soft);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .remember-me:hover .checkmark {
+        border-color: var(--accent);
+    }
+
+    .remember-me input:checked + .checkmark {
+        background: var(--accent);
+        border-color: var(--accent);
+    }
+
+    .remember-me input:checked + .checkmark::after {
+        content: "✓";
+        color: white;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .forgot {
+        text-decoration: none;
+        color: var(--accent);
+        font-size: 0.95rem;
+        transition: var(--transition);
+        font-weight: 500;
+    }
+
+    .forgot:hover {
+        color: var(--accent-dark);
+        text-decoration: underline;
+    }
+
+    /* BOTÓN LOGIN */
+    .btn-login {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: var(--transition);
+        font-size: 1.05rem;
+        letter-spacing: 0.5px;
+        box-shadow: 0 5px 20px rgba(139, 94, 60, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(139, 94, 60, 0.4);
+    }
+
+    .btn-login:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-login::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: 0.6s;
+    }
+
+    .btn-login:hover::before {
+        left: 100%;
+    }
+
+    /* FORMULARIO DE REGISTRO */
+    .register-form .login-title {
+        font-size: 2.6rem;
+    }
+
+    .register-form .login-subtitle {
+        margin-bottom: 40px;
+    }
+
+    .register-form form {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    /* LINK DE REGISTRO */
+    .register-link {
+        text-align: center;
+        margin-top: 35px;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        transition: var(--transition);
+    }
+
+    .register-link a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .register-link a:hover {
+        color: var(--accent-dark);
+    }
+
+    .register-link a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background: var(--accent);
+        transition: var(--transition);
+    }
+
+    .register-link a:hover::after {
+        width: 100%;
+    }
+
+
+    .back-home {
+        position: absolute;
+        bottom: 30px;
+        left: 25px;
+        background: var(--accent);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        transition: var(--transition);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .back-home:hover {
+        background: var(--accent-dark);
+        transform: translateY(-3px);
+    }
