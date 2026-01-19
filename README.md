@@ -91,11 +91,11 @@
 
 ---
 
-## 🚀 Instalación
+## 🚀 Installation
 
-### Requisitos Previos
+### Prerequisites
 
-Asegúrate de tener instalado lo siguiente:
+Make sure you have the following installed:
 
 | Requirement | Version | Download                                     |
 | ----------- | ------- | -------------------------------------------- |
